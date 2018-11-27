@@ -155,6 +155,9 @@ class Date extends DateTime {
 
   Date.fromMillisecondsSinceEpoch(int millisecondsSinceEpoch,
       {bool isUtc: false}) : super.fromMillisecondsSinceEpoch(millisecondsSinceEpoch, isUtc: isUtc);
+
+  Date.fromSecondsSinceEpoch(int secondsSinceEpoch,
+      {bool isUtc: false}) : super.fromMillisecondsSinceEpoch(secondsSinceEpoch * 1000, isUtc: isUtc);
   
   Date.now(): super.now();
 
@@ -178,9 +181,30 @@ class Date extends DateTime {
     );
   }
 
+  static Date get tomorrow {
+    return Date.now().nextDay;
+  }
+
+  static Date get yesterday {
+    return Date.now().previousDay;
+  }
+
+  static Date get today {
+    return Date.now();
+  }
+
   DateTime toDateTime() {
-    //return DateTime.fromMicrosecondsSinceEpoch(this.microsecondsSinceEpoch, isUtc: this.isUtc);
     return super.add(Duration(microseconds: 0));
+  }
+
+  Date toUTC() {
+    DateTime dt = super.toUtc();
+    return Date.fromMicrosecondsSinceEpoch(dt.microsecondsSinceEpoch, isUtc: dt.isUtc);
+  }
+
+  Date toLocal() {
+    DateTime dt = super.toLocal();
+    return Date.fromMicrosecondsSinceEpoch(dt.microsecondsSinceEpoch, isUtc: dt.isUtc);
   }
 
   // Override
@@ -199,42 +223,43 @@ class Date extends DateTime {
   }
 
   // TODO: this
-  Date addISOYears(int amount) {
-    return this;
-  }
+  // Date addISOYears(int amount) {
+  //   return this;
+  // }
 
   Date addMilliseconds(int amount) {
     return this.add(Duration(milliseconds: amount));
+  }
+
+  Date addMicroseconds(int amount) {
+    return this.add(Duration(microseconds: amount));
   }
 
   Date addMinutes(int amount) {
     return this.add(Duration(minutes: amount));
   }
 
-  // TODO: this
   Date addMonths(int amount) {
-    return this; //.add(Duration(: amount));
+    return this.setMonth(this.month + amount);
   }
 
   // TODO: this
-  Date addQuarters(int amount) {
-    return this; //.add(Duration(: amount));
-  }
+  // Date addQuarters(int amount) {
+  //   return this; //.add(Duration(: amount));
+  // }
 
   Date addSeconds(int amount) {
     return this.add(Duration(seconds: amount));
   }
 
   // TODO: this
-  Date addWeeks(int amount) {
-    return this; //.add(Duration());
-  }
+  // Date addWeeks(int amount) {
+  //   return this; //.add(Duration());
+  // }
 
-  // TODO: this
   Date addYears(int amount) {
-    return this; //.add(Duration());
+    return this.setYear(this.year + amount);
   }
-
 
   static bool areRangesOverlapping(Date initialRangeStartDate, Date initialRangeEndDate, Date comparedRangeStartDate, Date comparedRangeEndDate) {
 
@@ -256,7 +281,7 @@ class Date extends DateTime {
   // Date closestTo(dateToCompare, datesArray)
 
   int compare(Date other) {
-    super.compareTo(other.toDateTime());
+    return super.compareTo(other.toDateTime());
   }
 
   int compareAsc(Date dateLeft, Date dateRight) {
@@ -294,19 +319,42 @@ class Date extends DateTime {
   // String distanceInWordsStrict(dateToCompare, date, [options])
   // static String distanceInWordsToNow(date, [options])
   // Iterable<Date> eachDay(startDate, endDate, [step])
-  // Date endOfDay()
-  // Date endOfHour()
+
+  Date endOfDay() {
+    return this.setHour(23, 59, 59, 999, 999);
+  }
+
+  Date endOfHour() {
+    return this.setMinute(59, 59, 999, 999);
+  }
   // Date endOfISOWeek()
   // Date endOfISOYear()
-  // Date endOfMinute()
-  // Date endOfMonth()
+  Date endOfMinute() {
+    return this.setSecond(59, 999, 999);
+  }
+
+  Date endOfMonth() {
+    return Date(this.year, this.month + 1).subMicroseconds(1);
+  }
+  
   // Date endOfQuarter()
-  // Date endOfSecond()
-  // static Date endOfToday()
-  // static Date endOfTomorrow()
+  Date endOfSecond() {
+    return this.setMillisecond(999, 999);
+  }
+  static Date endOfToday() {
+    return Date.now().endOfDay();
+  }
+
+  static Date endOfTomorrow() {
+    return Date.now().nextDay.endOfDay();
+  }
+  static Date endOfYesterday() {
+    return Date.now().previousDay.endOfDay();
+  }
   // Date endOfWeek(date, [options])
-  // Date endOfYear(date)
-  // static Date endOfYesterday()
+  Date endOfYear() {
+    return this.setYear(this.year, DateTime.december).endOfMonth();
+  }
   // String format(date, [format], [options])
 
   /// Get the day of the month of the given date.
@@ -364,6 +412,7 @@ class Date extends DateTime {
   int getMonth() {
     return this.month;
   }
+
   // int getOverlappingDaysInRanges(initialRangeStartDate, initialRangeEndDate, comparedRangeStartDate, comparedRangeEndDate)
   // int getQuarter(date)
 
@@ -459,38 +508,84 @@ class Date extends DateTime {
     return this.isBefore(Date.now());
   }
 
+  bool isSameDay(Date other) {
+    return this.startOfDay() == other.startOfDay();
+  }
 
-  // bool isSameDay(dateLeft, dateRight)
-  // bool isSameHour(dateLeft, dateRight)
+  bool isSameHour(Date other) {
+    return this.startOfHour() == other.startOfHour();
+  }
+
   // bool isSameISOWeek(dateLeft, dateRight)
   // bool isSameISOYear(dateLeft, dateRight)
-  // bool isSameMinute(dateLeft, dateRight)
-  // bool isSameMonth(dateLeft, dateRight)
+
+  bool isSameMinute(Date other) {
+    return this.startOfMinute() == other.startOfMinute();
+  }
+
+  bool isSameMonth(Date other) {
+    return this.startOfMonth() == other.startOfMonth();
+  }
+
   // bool isSameQuarter(dateLeft, dateRight)
-  // bool isSameSecond(dateLeft, dateRight)
+
+  bool isSameSecond(Date other) {
+    return this.secondsSinceEpoch == other.secondsSinceEpoch;
+  }
+
   // bool isSameWeek(dateLeft, dateRight, [options])
-  // bool isSameYear(dateLeft, dateRight)
-  // bool isThisHour(date)
-  // bool isThisISOWeek(date)
-  // bool isThisISOYear(date)
-  // bool isThisMinute(date)
-  // bool isThisMonth(date)
-  // bool isThisQuarter(date)
-  // bool isThisSecond(date)
-  // bool isThisWeek(date, [options])
-  // bool isThisYear(date)
-  // bool isToday(date)
-  // bool isTomorrow(date)
-  // bool isValid(date)
+
+  bool isSameYear(Date other) {
+    return this.year == other.year;
+  }
+
+  bool isThisHour() {
+    return this.startOfHour() == Date.today.startOfHour();
+  }
+  // bool isThisISOWeek()
+  // bool isThisISOYear()
+
+  bool isThisMinute() {
+    return this.startOfMinute() == Date.today.startOfMinute();
+  }
+
+  bool get isThisMonth {
+    return this.isSameMonth(Date.today);
+  }
+  
+  // bool isThisQuarter()
+
+  bool get isThisSecond {
+    return this.isSameSecond(Date.today);
+  }
+
+  // bool isThisWeek(, [options])
+
+  bool get isThisYear {
+    return this.isSameYear(Date.today);
+  }
+
+  // bool isValid()
+
+  bool get isToday {
+    return this.isSameDay(Date.today);
+  }
+  bool get isTomorrow {
+    return this.isSameDay(Date.tomorrow);
+  }
+  bool get isYesterday {
+    return this.isSameDay(Date.yesterday);
+  }
 
   /// True if this Date is set to UTC time.
   bool get isUTC {
     return this.isUtc;
   }
 
-  // bool isWeekend(date)
+  bool get isWeekend {
+    return (this.day == DateTime.saturday || this.day == DateTime.sunday);
+  }
   // bool isWithinRange(date, startDate, endDate)
-  // bool isYesterday(date)
   // Date lastDayOfISOWeek(date)
   // Date lastDayOfISOYear(date)
   // Date lastDayOfMonth(date)
@@ -501,7 +596,6 @@ class Date extends DateTime {
   // static Date min(Iterable<Date>)
   // static Date parse(any)
   // Date setDate(date, dayOfMonth)
-  // Date setDay(date, day, [options])
   // Date setDayOfYear(date, dayOfYear)
   // Date setISODay(date, day)
   // Date setISOWeek(date, isoWeek)
@@ -645,28 +739,66 @@ class Date extends DateTime {
       microsecond
     );
   }
-  // Date setQuarter(date, quarter)
-  // Date setSeconds(date, seconds)
-  // Date startOfDay(date)
-  // Date startOfHour(date)
-  // Date startOfISOWeek(date)
-  // Date startOfISOYear(date)
-  // Date startOfMinute(date)
-  // Date startOfMonth(date)
-  // Date startOfQuarter(date)
-  // Date startOfSecond(date)
-  // static Date startOfToday()
-  // Date startOfWeek(date, [options])
-  // Date startOfYear(date)
-  // Date subHours(date, amount)
-  // Date subISOYears(date, amount)
-  // Date subMilliseconds(date, amount)
-  // Date subMinutes(date, amount)
-  // Date subMonths(date, amount)
-  // Date subQuarters(date, amount)
-  // Date subSeconds(date, amount)
-  // Date subWeeks(date, amount)
-  // Date subYears(date, amount)
+  // Date setQuarter(quarter)
+  // Date setSeconds(seconds)
+  Date startOfDay() {
+    return this.setHour(0, 0, 0, 0, 0);
+  }
+  Date startOfHour() {
+    return this.setMinute(0, 0, 0, 0);
+  }
+  // Date startOfISOWeek()
+  // Date startOfISOYear()
+  Date startOfMinute() {
+    return this.setSecond(0, 0, 0);
+  }
+  Date startOfMonth() {
+    return this.setDay(1, 0, 0, 0, 0, 0);
+  }
+  // Date startOfQuarter()
+  Date startOfSecond() {
+    return this.setMillisecond(0, 0);
+  }
+
+  static Date startOfToday() {
+    return Date.today.startOfDay();
+  }
+
+  // Date startOfWeek([options])
+
+  Date startOfYear() {
+    return this.setMonth(DateTime.january, 1, 0, 0, 0, 0, 0);
+  }
+  Date sub(Duration duration) {
+    return this.add( Duration.zero - duration );
+  }
+  Date subHours(int amount) {
+    return this.addHours(-amount);
+  }
+  Date subDays(int amount) {
+    return this.addDays(-amount);
+  }
+  Date subMilliseconds(amount) {
+    return this.addMilliseconds(-amount);
+  }
+  Date subMicroseconds(amount) {
+    return this.addMicroseconds(-amount);
+  }
+  // Date subISOYears(amount)
+  Date subMinutes(amount) {
+    return this.addMinutes(-amount);
+  }
+  Date subMonths(amount) {
+    return this.addMonths(-amount);
+  }
+  // Date subQuarters(amount)
+  Date subSeconds(amount) {
+    return this.addSeconds(-amount);
+  }
+  // Date subWeeks(amount)
+  Date subYears(amount) {
+    return this.addYears(-amount);
+  }
 
     // Operators
   bool equals(Date other) {
@@ -691,7 +823,7 @@ class Date extends DateTime {
   }
 
   String toString() {
-    return "[${super.toString()}]";
+    return super.toString();
   }
 
   //Additional
@@ -702,21 +834,29 @@ class Date extends DateTime {
   Date get previousDay {
     return this.addDays(-1);
   }
+
+  Date get nextMonth {
+    return this.setMonth(this.month + 1);
+  }
+
+  Date get previousMonth {
+    return this.setMonth(this.month - 1);
+  }
+
+  Date get nextYear {
+    return this.setYear(this.year + 1);
+  }
+
+  Date get previousYear {
+    return this.setYear(this.year - 1);
+  }
+
+  int get secondsSinceEpoch {
+    return this.millisecondsSinceEpoch ~/ 1000;
+  }
 }
 
 
 main(List<String> args) {
-  // Interval first = Interval(
-  //   Date(1890, 3, 20, 20, 20, 20, 20, 20),
-  //   Date.now()
-  // );
-  // Interval last = Interval(
-  //   Date(1996, 3, 29, 20, 20, 20, 20, 20),
-  //   Date.now().add(Duration(days: 4000))
-  // );
-  DateTime date = DateTime(1996, 3, 29, 20, 20, 20, 20, 20);
-  var d = Date.cast(date);
-  d = d.setMonth(6).setHour(12);
- // List<Interval> intervals 
-  print(d);
+  print(Date.today.previousYear.isThisYear);
 }
