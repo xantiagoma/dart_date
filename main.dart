@@ -139,18 +139,36 @@ class Date extends DateTime {
   
   // Constructos
   Date(int year,
-      [int month = 1,
+    [
+      int month = 1,
       int day = 1,
       int hour = 0,
       int minute = 0,
       int second = 0,
       int millisecond = 0,
-      int microsecond = 0]) : super(year, month, day, hour, minute, second, millisecond, microsecond);
+      int microsecond = 0
+    ]
+  ) : super(year, month, day, hour, minute, second, millisecond, microsecond);
 
   Date.fromMicrosecondsSinceEpoch(int microsecondsSinceEpoch,
       {bool isUtc: false}) : super.fromMicrosecondsSinceEpoch(microsecondsSinceEpoch, isUtc: isUtc);
+
+  Date.fromMillisecondsSinceEpoch(int millisecondsSinceEpoch,
+      {bool isUtc: false}) : super.fromMillisecondsSinceEpoch(millisecondsSinceEpoch, isUtc: isUtc);
   
   Date.now(): super.now();
+
+  Date.utc(int year,
+    [
+      int month = 1,
+      int day = 1,
+      int hour = 0,
+      int minute = 0,
+      int second = 0,
+      int millisecond = 0,
+      int microsecond = 0
+    ]
+  ) : super.utc(year, month, day, hour, minute, second, millisecond, microsecond);
 
   // Static
   static Date cast(DateTime date) {
@@ -290,24 +308,100 @@ class Date extends DateTime {
   // Date endOfYear(date)
   // static Date endOfYesterday()
   // String format(date, [format], [options])
-  // int getDate(date)
+
+  /// Get the day of the month of the given date.
+  /// The day of the month 1..31.
+  int getDate() {
+    return this.day;
+  }
+
   // int getDay(date)
   // int getDayOfYear(date)
   // int getDaysInMonth(date)
   // int getDaysInYear(date)
-  // int getHours(date)
+
+  /// Get the hours of the given date.
+  /// The hour of the day, expressed as in a 24-hour clock 0..23.
+  int getHours() {
+    return this.hour;
+  }
+
   // int getISODay(date)
   // int getISOWeek(date)
   // int getISOWeeksInYear(date)
   // int getISOYear(date)
-  // int getMilliseconds(date)
-  // int getMinutes(date)
-  // int getMonth(date)
+
+  /// Get the milliseconds of the given date.
+  /// The millisecond 0...999.
+  int getMilliseconds() {
+    return this.millisecond;
+  }
+
+  /// Get the microseconds of the given date.
+  /// The microsecond 0...999.
+  int getMicroseconds() {
+    return this.microsecond;
+  }
+
+  /// Get the milliseconds since the "Unix epoch" 1970-01-01T00:00:00Z (UTC).
+  int getMillisecondsSinceEpoch() {
+    return this.millisecondsSinceEpoch;
+  }
+
+  /// Get the microseconds since the "Unix epoch" 1970-01-01T00:00:00Z (UTC).
+  int getMicrosecondsSinceEpoch() {
+    return this.microsecondsSinceEpoch;
+  }
+
+  /// Get the minutes of the given date.
+  /// The minute 0...59.
+  int getMinutes() {
+    return this.minute;
+  }
+
+  /// Get the month of the given date.
+  /// The month 1..12.
+  int getMonth() {
+    return this.month;
+  }
   // int getOverlappingDaysInRanges(initialRangeStartDate, initialRangeEndDate, comparedRangeStartDate, comparedRangeEndDate)
   // int getQuarter(date)
-  // int getSeconds(date)
+
+  /// Get the seconds of the given date.
+  /// The second 0...59.
+  int getSeconds(date) {
+    return this.second;
+  }
+
   // int getTime(date)
-  // int getYear(date)
+
+  /// The year
+  int getYear(date) {
+    return this.year;
+  }
+
+  /// The time zone name.
+  /// This value is provided by the operating system and may be an abbreviation or a full name.
+  /// In the browser or on Unix-like systems commonly returns abbreviations, such as "CET" or "CEST".
+  /// On Windows returns the full name, for example "Pacific Standard Time".
+  String getTimeZoneName() {
+    return this.timeZoneName;
+  }
+
+  /// The time zone offset, which is the difference between local time and UTC.
+  /// The offset is positive for time zones east of UTC.
+  /// Note, that JavaScript, Python and C return the difference between UTC and local time.
+  /// Java, C# and Ruby return the difference between local time and UTC.
+  Duration getTimeZoneOffset() {
+    return this.timeZoneOffset;
+  }
+
+  /// The day of the week monday..sunday.
+  /// In accordance with ISO 8601 a week starts with Monday, which has the value 1.
+  int getWeekday() {
+    return this.weekday;
+  }
+
   // bool isAfter(date, dateToCompare)
   // bool isBefore(date, dateToCompare)
   // static bool isDate(argument)
@@ -345,6 +439,12 @@ class Date extends DateTime {
   // bool isTomorrow(date)
   // bool isTuesday(date)
   // bool isValid(date)
+
+  /// True if this Date is set to UTC time.
+  bool isUTC() {
+    return this.isUtc;
+  }
+
   // bool isWednesday(date)
   // bool isWeekend(date)
   // bool isWithinRange(date, startDate, endDate)
