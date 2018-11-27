@@ -402,17 +402,64 @@ class Date extends DateTime {
     return this.weekday;
   }
 
-  // bool isAfter(date, dateToCompare)
-  // bool isBefore(date, dateToCompare)
-  // static bool isDate(argument)
-  // bool isEqual(dateLeft, dateRight)
+  bool isSameOrAfter(Date other) {
+    return (this == other || this.isAfter(other));
+  }
+  
+  bool isSameOrBefore(Date other) {
+    return (this == other || this.isBefore(other));
+  }
+  
+  static bool isDate(argument) {
+    return argument is Date;
+  }
+
+  bool isEqual(other) {
+    return this.equals(other);
+  }
+
+  bool get isMonday {
+    return this.day == DateTime.monday;
+  }
+
+  bool get isTuesday {
+    return this.day == DateTime.tuesday;
+  }
+  
+  bool get isWednesday {
+    return this.day == DateTime.wednesday;
+  }
+  
+  bool get isThursday {
+    return this.day == DateTime.thursday;
+  }
+  
+  bool get isFriday {
+    return this.day == DateTime.friday;
+  }
+  
+  bool get isSaturday {
+    return this.day == DateTime.saturday;
+  }
+  
+  bool get isSunday {
+    return this.day == DateTime.sunday;
+  }
+
   // bool isFirstDayOfMonth(date)
-  // bool isFriday(date)
-  // bool isFuture(date)
+  
+  bool get isFuture {
+    return this.isAfter(Date.now());
+  }
+
   // bool isLastDayOfMonth(date)
   // bool isLeapYear(date)
-  // bool isMonday(date)
-  // bool isPast(date)
+
+  bool get isPast {
+    return this.isBefore(Date.now());
+  }
+
+
   // bool isSameDay(dateLeft, dateRight)
   // bool isSameHour(dateLeft, dateRight)
   // bool isSameISOWeek(dateLeft, dateRight)
@@ -423,8 +470,6 @@ class Date extends DateTime {
   // bool isSameSecond(dateLeft, dateRight)
   // bool isSameWeek(dateLeft, dateRight, [options])
   // bool isSameYear(dateLeft, dateRight)
-  // bool isSaturday(date)
-  // bool isSunday(date)
   // bool isThisHour(date)
   // bool isThisISOWeek(date)
   // bool isThisISOYear(date)
@@ -434,18 +479,15 @@ class Date extends DateTime {
   // bool isThisSecond(date)
   // bool isThisWeek(date, [options])
   // bool isThisYear(date)
-  // bool isThursday(date)
   // bool isToday(date)
   // bool isTomorrow(date)
-  // bool isTuesday(date)
   // bool isValid(date)
 
   /// True if this Date is set to UTC time.
-  bool isUTC() {
+  bool get isUTC {
     return this.isUtc;
   }
 
-  // bool isWednesday(date)
   // bool isWeekend(date)
   // bool isWithinRange(date, startDate, endDate)
   // bool isYesterday(date)
@@ -461,16 +503,150 @@ class Date extends DateTime {
   // Date setDate(date, dayOfMonth)
   // Date setDay(date, day, [options])
   // Date setDayOfYear(date, dayOfYear)
-  // Date setHours(date, hours)
   // Date setISODay(date, day)
   // Date setISOWeek(date, isoWeek)
   // Date setISOYear(date, isoYear)
-  // Date setMilliseconds(date, milliseconds)
-  // Date setMinutes(date, minutes)
-  // Date setMonth(date, month)
+
+  Date setYear( int year, [
+    int month = null,
+    int day = null,
+    int hour = null,
+    int minute = null,
+    int second = null,
+    int millisecond = null,
+    int microsecond = null
+  ]) {
+    return Date(
+      year,
+      month == null ? this.month : month,
+      day == null ? this.day : day,
+      hour == null ? this.hour : hour,
+      minute == null ? this.minute : minute,
+      second == null ? this.second : second,
+      millisecond == null ? this.millisecond : millisecond,
+      microsecond == null ? this.microsecond : microsecond
+    );
+  }
+  
+  Date setMonth(int month, [
+    int day = null,
+    int hour = null,
+    int minute = null,
+    int second = null,
+    int millisecond = null,
+    int microsecond = null
+  ]) {
+    return Date(
+      this.year,
+      month,
+      day == null ? this.day : day,
+      hour == null ? this.hour : hour,
+      minute == null ? this.minute : minute,
+      second == null ? this.second : second,
+      millisecond == null ? this.millisecond : millisecond,
+      microsecond == null ? this.microsecond : microsecond
+    );
+  }
+  
+  Date setDay(int day, [
+    int hour = null,
+    int minute = null,
+    int second = null,
+    int millisecond = null,
+    int microsecond = null
+  ]) {
+    return Date(
+      this.year,
+      this.month,
+      day,
+      hour == null ? this.hour : hour,
+      minute == null ? this.minute : minute,
+      second == null ? this.second : second,
+      millisecond == null ? this.millisecond : millisecond,
+      microsecond == null ? this.microsecond : microsecond
+    );
+  }
+  
+  Date setHour(int hour, [
+    int minute = null,
+    int second = null,
+    int millisecond = null,
+    int microsecond = null
+  ]) {
+    return Date(
+      this.year,
+      this.month,
+      this.day,
+      hour,
+      minute == null ? this.minute : minute,
+      second == null ? this.second : second,
+      millisecond == null ? this.millisecond : millisecond,
+      microsecond == null ? this.microsecond : microsecond
+    );
+  }
+  
+  Date setMinute(int minute, [
+    int second = null,
+    int millisecond = null,
+    int microsecond = null
+  ]) {
+    return Date(
+      this.year,
+      this.month,
+      this.day,
+      this.hour,
+      minute,
+      second == null ? this.second : second,
+      millisecond == null ? this.millisecond : millisecond,
+      microsecond == null ? this.microsecond : microsecond
+    );
+  }
+  
+  Date setSecond(int second, [
+    int millisecond = null,
+    int microsecond = null
+  ]) {
+    return Date(
+      this.year,
+      this.month,
+      this.day,
+      this.hour,
+      this.minute,
+      second,
+      millisecond == null ? this.millisecond : millisecond,
+      microsecond == null ? this.microsecond : microsecond
+    );
+  }
+  
+  Date setMillisecond(int millisecond, [
+    int microsecond = null
+  ]) {
+    return Date(
+      this.year,
+      this.month,
+      this.day,
+      this.hour,
+      this.minute,
+      this.second,
+      millisecond,
+      microsecond == null ? this.microsecond : microsecond
+    );
+  }
+  
+  Date setMicrosecond( int microsecond ) {
+    return Date(
+      this.year,
+      this.month,
+      this.day,
+      this.hour,
+      this.minute,
+      this.second,
+      this.millisecond,
+      microsecond
+    );
+  }
   // Date setQuarter(date, quarter)
   // Date setSeconds(date, seconds)
-  // Date setYear(date, year)
   // Date startOfDay(date)
   // Date startOfHour(date)
   // Date startOfISOWeek(date)
@@ -517,6 +693,15 @@ class Date extends DateTime {
   String toString() {
     return "[${super.toString()}]";
   }
+
+  //Additional
+  Date get nextDay {
+    return this.addDays(1);
+  }
+
+  Date get previousDay {
+    return this.addDays(-1);
+  }
 }
 
 
@@ -530,6 +715,8 @@ main(List<String> args) {
   //   Date.now().add(Duration(days: 4000))
   // );
   DateTime date = DateTime(1996, 3, 29, 20, 20, 20, 20, 20);
+  var d = Date.cast(date);
+  d = d.setMonth(6).setHour(12);
  // List<Interval> intervals 
-  print("${-1*0}");
+  print(d);
 }
