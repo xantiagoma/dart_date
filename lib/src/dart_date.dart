@@ -212,6 +212,9 @@ class Date extends DateTime {
     return Date.cast(super.add(duration));
   }
   
+  Duration diff(Date date) {
+    return this.difference(date);
+  }
 
   // date-fns methods
   Date addDays(int amount) {
@@ -243,19 +246,17 @@ class Date extends DateTime {
     return this.setMonth(this.month + amount);
   }
 
-  // TODO: this
-  // Date addQuarters(int amount) {
-  //   return this; //.add(Duration(: amount));
-  // }
+  Date addQuarters(int amount) {
+    return this.addMonths(amount * 3);
+  }
 
   Date addSeconds(int amount) {
     return this.add(Duration(seconds: amount));
   }
 
-  // TODO: this
-  // Date addWeeks(int amount) {
-  //   return this; //.add(Duration());
-  // }
+  Date addWeeks(int amount) {
+    return this.addDays(amount * 7);
+  }
 
   Date addYears(int amount) {
     return this.setYear(this.year + amount);
@@ -327,8 +328,10 @@ class Date extends DateTime {
   Date endOfHour() {
     return this.setMinute(59, 59, 999, 999);
   }
+
   // Date endOfISOWeek()
   // Date endOfISOYear()
+
   Date endOfMinute() {
     return this.setSecond(59, 999, 999);
   }
@@ -338,9 +341,11 @@ class Date extends DateTime {
   }
   
   // Date endOfQuarter()
+
   Date endOfSecond() {
     return this.setMillisecond(999, 999);
   }
+
   static Date endOfToday() {
     return Date.now().endOfDay();
   }
@@ -348,13 +353,16 @@ class Date extends DateTime {
   static Date endOfTomorrow() {
     return Date.now().nextDay.endOfDay();
   }
+
   static Date endOfYesterday() {
     return Date.now().previousDay.endOfDay();
   }
+
   // Date endOfWeek(date, [options])
   Date endOfYear() {
     return this.setYear(this.year, DateTime.december).endOfMonth();
   }
+
   // String format(date, [format], [options])
 
   /// Get the day of the month of the given date.
@@ -363,10 +371,22 @@ class Date extends DateTime {
     return this.day;
   }
 
-  // int getDay(date)
-  // int getDayOfYear(date)
-  // int getDaysInMonth(date)
-  // int getDaysInYear(date)
+  /// Get the day of the week of the given date.
+  int getDay() {
+    return this.weekday;
+  }
+
+  int getDayOfYear() {
+    return this.diff(this.startOfYear()).inDays + 1;
+  }
+
+  int getDaysInMonth() {
+    return this.endOfMonth().diff(this.startOfMonth()).inDays + 1;
+  }
+  
+  int getDaysInYear() {
+    return this.endOfYear().diff(this.startOfYear()).inDays + 1;
+  }
 
   /// Get the hours of the given date.
   /// The hour of the day, expressed as in a 24-hour clock 0..23.
@@ -858,5 +878,5 @@ class Date extends DateTime {
 
 
 main(List<String> args) {
-  print(Date.today.previousYear.isThisYear);
+  print(Date.today.endOfYear().addMicroseconds(1).addQuarters(1));
 }
