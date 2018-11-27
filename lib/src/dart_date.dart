@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'dart:math';
 
 class Interval {
   Date _start;
@@ -140,7 +141,6 @@ class Interval {
 
 class Date extends DateTime {
   
-  // Constructos
   Date(int year,
     [
       int month = 1,
@@ -176,7 +176,6 @@ class Date extends DateTime {
     ]
   ) : super.utc(year, month, day, hour, minute, second, millisecond, microsecond);
 
-  // Static
   static Date cast(DateTime date) {
     return Date.fromMicrosecondsSinceEpoch(
       date.microsecondsSinceEpoch,
@@ -224,16 +223,18 @@ class Date extends DateTime {
     return Date.fromMicrosecondsSinceEpoch(dt.microsecondsSinceEpoch, isUtc: dt.isUtc);
   }
 
-  // Override
   Date add(Duration duration) {
     return Date.cast(super.add(duration));
+  }
+  
+  Date subtract(Duration duration) {
+    return Date.cast(super.add(Duration.zero - duration));
   }
   
   Duration diff(Date date) {
     return this.difference(date);
   }
 
-  // date-fns methods
   Date addDays(int amount) {
     return this.add(Duration(days: amount));
   }
@@ -295,14 +296,37 @@ class Date extends DateTime {
     return initial.cross(compared) || compared.cross(initial);
   }
 
-  // int closestIndexTo(dateToCompare, datesArray)
-  // Date closestTo(dateToCompare, datesArray)
+  int closestIndexTo(Iterable<Date> datesArray) {
+    var differences  = datesArray.map( (date) {
+      return date.difference(this).abs();
+    });
+    
+    int index = 0;
+    for (var i = 0; i < differences.length; i++) {
+      if(differences.elementAt(i) < differences.elementAt(index)) {
+        index = i;
+      }
+    }
+    return index;
+  }
+
+  Date closestTo(Iterable<Date> datesArray) {
+    return datesArray.elementAt(this.closestIndexTo(datesArray));
+  }
 
   int compare(Date other) {
     return super.compareTo(other.toDateTime);
   }
 
-  int compareAsc(Date dateLeft, Date dateRight) {
+  static Date min(Date left, Date right) {
+    return (left < right) ? left : right;
+  }
+
+  static Date max(Date left, Date right) {
+    return (left < right) ? right : left;
+  }
+
+  static int compareAsc(Date dateLeft, Date dateRight) {
     if(dateLeft.isAfter(dateRight)) {
       return 1;
     } else if (dateLeft.isBefore(dateRight)) {
@@ -312,8 +336,8 @@ class Date extends DateTime {
     }
   }
 
-  int compareDesc(Date dateLeft, Date dateRight) {
-    return (-1)*this.compareAsc(dateLeft, dateRight);
+  static int compareDesc(Date dateLeft, Date dateRight) {
+    return (-1)*Date.compareAsc(dateLeft, dateRight);
   }
 
   // int differenceInCalendarDays(dateLeft, dateRight)
@@ -346,7 +370,9 @@ class Date extends DateTime {
     return this.setMinute(59, 59, 999, 999);
   }
 
-  // Date endOfISOWeek()
+  Date get endOfISOWeek {
+    return this.endOfWeek.nextDay;
+  }
   // Date endOfISOYear()
 
   Date get endOfMinute {
@@ -375,7 +401,9 @@ class Date extends DateTime {
     return Date.now().previousDay.endOfDay;
   }
 
-  // Date endOfWeek(date, [options])
+  Date get endOfWeek {
+    return this.nextWeek.startOfWeek.subMicroseconds(1);
+  }
   Date get endOfYear {
     return this.setYear(this.year, DateTime.december).endOfMonth;
   }
@@ -786,7 +814,10 @@ class Date extends DateTime {
   Date get startOfHour {
     return this.setMinute(0, 0, 0, 0);
   }
-  // Date startOfISOWeek()
+  Date get startOfISOWeek {
+    return this.startOfWeek.nextDay;
+  }
+
   // Date startOfISOYear()
   Date get startOfMinute {
     return this.setSecond(0, 0, 0);
@@ -803,7 +834,9 @@ class Date extends DateTime {
     return Date.today.startOfDay;
   }
 
-  // Date startOfWeek([options])
+  Date get startOfWeek {
+    return this.subtract(Duration( days: this.weekday )).startOfDay;
+  }
 
   Date get startOfYear {
     return this.setMonth(DateTime.january, 1, 0, 0, 0, 0, 0);
@@ -874,6 +907,10 @@ class Date extends DateTime {
     return super.toString();
   }
 
+  String toHumanString() {
+    return this.format("E MMM d y H:m:s");
+  }
+
   //Additional
   Date get nextDay {
     return this.addDays(1);
@@ -897,6 +934,14 @@ class Date extends DateTime {
 
   Date get previousYear {
     return this.setYear(this.year - 1);
+  }
+
+  Date get nextWeek {
+    return this.addDays(7);
+  }
+
+  Date get previousWeek {
+    return this.subDays(7);
   }
 
   int get secondsSinceEpoch {
