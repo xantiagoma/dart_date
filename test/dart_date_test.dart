@@ -1,10 +1,11 @@
 import 'package:dart_date/dart_date.dart';
 import 'package:test/test.dart';
 
-void main(List<String> args) {
+void main() {
   group('First', () {
     test('Second', () {
-      expect(true, true);
+      Date d = Date.today;
+      expect(d, d.add(Duration(days: 0)));
     });
   });
 }
