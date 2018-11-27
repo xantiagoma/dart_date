@@ -1,3 +1,6 @@
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
 class Interval {
   Date _start;
   Duration _duration;
@@ -26,7 +29,7 @@ class Interval {
     return (
       (date.isAfter(this.start) || date.isAtSameMomentAs(this.start)) &&
       (date.isBefore(this.end) || date.isAtSameMomentAs(this.end))
-    )  ;
+    );
   }
 
   bool contains(Interval interval) {
@@ -179,6 +182,20 @@ class Date extends DateTime {
       date.microsecondsSinceEpoch,
       isUtc: date.isUtc
     );
+  }
+
+  static Date parse(String pattern, String dateString, [bool isUTC = false,]) {
+    return Date.cast(DateFormat(pattern).parse(dateString, isUTC));
+  }
+
+  static Future<Date> asyncParse(String pattern, String dateString, {
+    String locale = "en_US",
+    bool isUTC = false,
+  }) async {
+    await initializeDateFormatting(locale, null);
+    Date df = Date.cast(DateFormat(pattern, locale).parse(dateString, isUTC));
+    await initializeDateFormatting("en_US", null);
+    return df;
   }
 
   static Date get tomorrow {
@@ -884,5 +901,16 @@ class Date extends DateTime {
 
   int get secondsSinceEpoch {
     return this.millisecondsSinceEpoch ~/ 1000;
+  }
+
+  String format(String pattern) {
+    return DateFormat(pattern).format(this.toDateTime);
+  }
+
+  Future<String> asyncFormat(String pattern, [String locale = "en_US"]) async {
+    await initializeDateFormatting(locale, null);
+    String df = DateFormat(pattern, locale).format(this.toDateTime);
+    await initializeDateFormatting("en_US", null);
+    return df;
   }
 }
