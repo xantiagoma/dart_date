@@ -12,13 +12,14 @@ main(List<String> args) {
   // print(Date.now().endOfWeek.toHumanString());
   // print(Date.now().startOfISOWeek.toHumanString());
   // print(Date.now().endOfISOWeek.toHumanString());
-  print(Date.now().closestTo( [
-    n.nextWeek,
-    n.previousDay.previousDay,
-    n.previousWeek.nextDay,
-    n.nextMonth,
-    n.nextDay,
-    //n,
-    n.nextYear
-  ] ));
+  // print(Date.now().closestTo( [
+  //   n.nextWeek,
+  //   n.previousDay.previousDay,
+  //   n.previousWeek.nextDay,
+  //   n.nextMonth,
+  //   n.nextDay,
+  //   //n,
+  //   n.nextYear
+  // ] ));
+  print(Date.utc(2020).local);
 }

@@ -187,6 +187,10 @@ class Date extends DateTime {
     return Date.cast(DateFormat(pattern).parse(dateString, isUTC));
   }
 
+  static Date unix(int seconds) {
+    return Date.fromSecondsSinceEpoch(seconds);
+  }
+
   static Future<Date> asyncParse(String pattern, String dateString, {
     String locale = "en_US",
     bool isUTC = false,
@@ -957,5 +961,13 @@ class Date extends DateTime {
     String df = DateFormat(pattern, locale).format(this.toDateTime);
     await initializeDateFormatting("en_US", null);
     return df;
+  }
+
+  Date get utc {
+    return Date.fromMicrosecondsSinceEpoch(this.microsecondsSinceEpoch, isUtc: true);
+  }
+
+  Date get local {
+    return Date.fromMicrosecondsSinceEpoch(this.microsecondsSinceEpoch, isUtc: false);
   }
 }
