@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'dart:math';
+import 'dart:async';
 
 class Interval {
   Date _start;
@@ -351,20 +352,55 @@ class Date extends DateTime {
   // int differenceInCalendarQuarters(dateLeft, dateRight)
   // int differenceInCalendarWeeks(dateLeft, dateRight, [options])
   // int differenceInCalendarYears(dateLeft, dateRight)
-  // int differenceInDays(dateLeft, dateRight)
-  // int differenceInHours(dateLeft, dateRight)
   // int differenceInISOYears(dateLeft, dateRight)
-  // int differenceInMilliseconds(dateLeft, dateRight)
-  // int differenceInMinutes(dateLeft, dateRight)
+  int differenceInMicroseconds(Date other) {
+    return this.diff(other).inMicroseconds;
+  }
+  int differenceInMilliseconds(Date other) {
+    return this.diff(other).inMilliseconds;
+  }
+  int differenceInMinutes(Date other) {
+    return this.diff(other).inMinutes;
+  }
+  int differenceInSeconds(Date other) {
+    return this.diff(other).inSeconds;
+  }
+  int differenceInHours(Date other) {
+    return this.diff(other).inHours;
+  }
+  int differenceInDays(Date other) {
+    return this.diff(other).inDays;
+  }
+
+
   // int differenceInMonths(dateLeft, dateRight)
   // int differenceInQuarters(dateLeft, dateRight)
-  // int differenceInSeconds(dateLeft, dateRight)
   // int differenceInWeeks(dateLeft, dateRight)
   // int differenceInYears(dateLeft, dateRight)
   // String distanceInWords(dateToCompare, date, [options])
   // String distanceInWordsStrict(dateToCompare, date, [options])
   // static String distanceInWordsToNow(date, [options])
-  // Iterable<Date> eachDay(startDate, endDate, [step])
+  // TODO: Test
+  Iterable<Date> eachDay(Date date) sync* {
+    if(this.isSameDay(date)) {
+      yield date.startOfDay;
+    } else {
+      Duration difference = this.diff(date);
+      int days = difference.abs().inDays;
+      Date current = date.startOfDay;
+      if(difference.isNegative) {
+        for( int i = 0; i < days ; i++ ){
+          yield current;
+          current = current.nextDay;
+        }
+      } else {
+        for( int i = 0; i < days ; i++ ){
+          yield current;
+          current = current.nextDay;
+        }
+      }
+    }
+  }
 
   Date get endOfDay {
     return this.setHour(23, 59, 59, 999, 999);
@@ -411,8 +447,6 @@ class Date extends DateTime {
   Date get endOfYear {
     return this.setYear(this.year, DateTime.december).endOfMonth;
   }
-
-  // String format(date, [format], [options])
 
   /// Get the day of the month of the given date.
   /// The day of the month 1..31.
