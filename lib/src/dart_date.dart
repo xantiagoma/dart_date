@@ -1,7 +1,5 @@
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'dart:math';
-import 'dart:async';
 
 class Interval {
   Date _start;
@@ -129,10 +127,10 @@ class Interval {
   
   bool operator >=(Interval other) => ( this.end.isAfter(other.end) || this.end.isAtSameMomentAs(other.end) );
 
-  bool operator ==(other) {
-    if(other is! Interval) return false;
-    return this.equals(other);
-  }
+  // bool operator ==(other) {
+  //   if(other is! Interval) return false;
+  //   return this.equals(other);
+  // }
 
   String toString() {
     return "<${this.start} | ${this.end} | ${this.duration} >";
@@ -207,26 +205,17 @@ class Date extends DateTime {
   }
 
   /// Transforms a date that follows a pattern from a [String] representation to a [Date] object
-  static Date parse(String pattern, String dateString, [bool isUTC = false,]) {
-    return Date.cast(DateFormat(pattern).parse(dateString, isUTC));
+  static Date parse(String pattern, String dateString, {
+    String locale = "en_US",
+    bool isUTC = false,
+  }) {
+    initializeDateFormatting();
+    return Date.cast(DateFormat(pattern, locale).parse(dateString, isUTC));
   }
 
   /// Create a [Date] object from a Unix timestamp
   static Date unix(int seconds) {
     return Date.fromSecondsSinceEpoch(seconds);
-  }
-
-  /// Like [parse] but accepts a locale string to convert from a language diffent to the default one (en_US)
-  /// 
-  /// Use if you're working with languages different to en_US
-  static Future<Date> asyncParse(String pattern, String dateString, {
-    String locale = "en_US",
-    bool isUTC = false,
-  }) async {
-    await initializeDateFormatting(locale, null);
-    Date df = Date.cast(DateFormat(pattern, locale).parse(dateString, isUTC));
-    await initializeDateFormatting("en_US", null);
-    return df;
   }
 
   /// Tomorrow at same hour / minute / second than now
@@ -1294,16 +1283,9 @@ class Date extends DateTime {
   ///     "hh 'o''clock' a, zzzz"           12 o'clock PM, Pacific Daylight Time
   ///     "K:mm a, vvv"                     0:00 PM, PT
   ///     "yyyyy.MMMMM.dd GGG hh:mm aaa"    01996.July.10 AD 12:08 PM
-  String format(String pattern) {
-    return DateFormat(pattern).format(this.toDateTime);
-  }
-
-  /// Like [format()] but can specified a [String] with the locale
-  Future<String> asyncFormat(String pattern, [String locale = "en_US"]) async {
-    await initializeDateFormatting(locale, null);
-    String df = DateFormat(pattern, locale).format(this.toDateTime);
-    await initializeDateFormatting("en_US", null);
-    return df;
+  String format(String pattern, [String locale = "en_US"]) {
+    initializeDateFormatting();
+    return DateFormat(pattern, locale).format(this.toDateTime);
   }
 
   /// Get UTC [Date] from this [Date]
