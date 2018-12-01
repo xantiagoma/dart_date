@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:timeago/timeago.dart' as timeago_lib;
 
 class Interval {
   Date _start;
@@ -126,11 +127,6 @@ class Interval {
   bool operator >(Interval other) => ( this.end.isAfter(other.end) );
   
   bool operator >=(Interval other) => ( this.end.isAfter(other.end) || this.end.isAtSameMomentAs(other.end) );
-
-  // bool operator ==(other) {
-  //   if(other is! Interval) return false;
-  //   return this.equals(other);
-  // }
 
   String toString() {
     return "<${this.start} | ${this.end} | ${this.duration} >";
@@ -447,10 +443,19 @@ class Date extends DateTime {
   // int differenceInQuarters(dateLeft, dateRight)
   // int differenceInWeeks(dateLeft, dateRight)
   // int differenceInYears(dateLeft, dateRight)
-  // String distanceInWords(dateToCompare, date, [options])
-  // String distanceInWordsStrict(dateToCompare, date, [options])
-  // static String distanceInWordsToNow(date, [options])
-  // TODO: Test
+
+  /// Formats provided [date] to a fuzzy time like 'a moment ago' (use timeago package to change locales)
+  ///
+  /// - If [locale] is passed will look for message for that locale, if you want
+  ///   to add or override locales use [setLocaleMessages]. Defaults to 'en'
+  /// - If [clock] is passed this will be the point of reference for calculating
+  ///   the elapsed time. Defaults to DateTime.now()
+  /// - If [allowFromNow] is passed, format will use the From prefix, ie. a date
+  ///   5 minutes from now in 'en' locale will display as "5 minutes from now"
+  /// If locales was not loaded previously en would be used use timeago.setLocaleMessages to set them
+  String timeago({String locale, DateTime clock, bool allowFromNow}) {
+    return timeago_lib.format(this.toDateTime, locale: locale, clock: clock, allowFromNow: allowFromNow);
+  }
 
   /// Return the array of dates within the specified range.
   Iterable<Date> eachDay(Date date) sync* {
@@ -1125,11 +1130,6 @@ class Date extends DateTime {
   bool operator >=(Date other) => (
     this.isAfter(other) || this.isAtSameMomentAs(other)
   );
-
-  bool operator ==(other) {
-    if(other is! Date) return false;
-    return this.equals(other);
-  }
 
   String toString() {
     return super.toString();

@@ -1,25 +1,27 @@
 import 'package:dart_date/dart_date.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 
 main(List<String> args) {
-  var n = Date.now();
-  var d = Date.now().format("dd-MMMM-yyyy", "es_ES");
-  var x = Date.parse("dd-MMMM-yyyy", d, locale: "es_ES");
-  print("$d - $x");
+  const pattern = "'Heute ist' dd-MMMM-yyyy";
+  final n = Date.now();
+  final d = Date.now().format(pattern, "de_DE");
+  final x = Date.parse(pattern, d, locale: "de_DE");
+  print("$d ($x)"); // Heute ist 30-November-2018 (2018-11-30 00:00:00.000)
 
-  print(Date.now().format("hh:mm:ss"));
-  print(Date.now().startOfWeek.toHumanString());
-  print(Date.now().endOfWeek.toHumanString());
-  print(Date.now().startOfISOWeek.toHumanString());
-  print(Date.now().endOfISOWeek.toHumanString());
-  print(Date.now().closestTo( [
+  // ES language is pre-configured;
+  print(Date.now().subDays(100).timeago(locale: 'es')); // hace 3 meses
+  print(Date.now().format('MMMM dd y, h:mm:ss a')); // November 30 2018, 9:14:29 PM
+  print(Date(2006, 6, 6, 6, 6, 6, 6, 6)); // 2006-06-06 06:06:06.006006 // UTC-5
+  print(Date(2006, 6, 6, 6, 6, 6, 6, 6).UTC); // 2006-06-06 11:06:06.006006Z // UTC
+  var now = Date.now(); // 2018-11-30 21:25:21.092647
+  var closest = now.closestTo([ //2018-11-28 21:25:21.025275
     n.nextWeek,
     n.previousDay.previousDay,
     n.previousWeek.nextDay,
     n.nextMonth,
-    n.nextDay,
+    //n.nextDay,
     //n,
     n.nextYear
-  ] ));
+  ]);
+  print("Closest to now ($now): $closest (${closest.timeago()})");
+  // Closest to now (2018-11-30 21:25:21.092647): 2018-11-28 21:25:21.025275 (2 days ago)
 }
