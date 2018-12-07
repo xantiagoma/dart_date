@@ -201,12 +201,14 @@ class Date extends DateTime {
   }
 
   /// Transforms a date that follows a pattern from a [String] representation to a [Date] object
-  static Date parse(String pattern, String dateString, {
+  static Date parse(String dateString, {
+    String pattern = null,
     String locale = "en_US",
     bool isUTC = false,
   }) {
     initializeDateFormatting();
-    return Date.cast(DateFormat(pattern, locale).parse(dateString, isUTC));
+    DateTime date = pattern == null ? DateTime.parse(dateString) : DateFormat(pattern, locale).parse(dateString, isUTC);
+    return Date.cast(date);
   }
 
   /// Create a [Date] object from a Unix timestamp
@@ -618,7 +620,15 @@ class Date extends DateTime {
     return this.second;
   }
 
-  // int getTime(date)
+  /// get the numer of milliseconds since epoch
+  int get timestamp {
+    return this.millisecondsSinceEpoch;
+  }
+  
+  /// get the numer of milliseconds since epoch
+  int get getTime {
+    return this.millisecondsSinceEpoch;
+  }
 
   /// The year
   int get getYear {
@@ -702,15 +712,28 @@ class Date extends DateTime {
     return this.day == DateTime.sunday;
   }
 
-  // bool isFirstDayOfMonth(date)
+  /// Is the given date the first day of a month?
+  bool get isFirstDayOfMonth {
+    final firstDate = this.startOfMonth;
+    return this.isSameDay(firstDate);
+  }
   
   /// Return true if this date [isAfter] [Date.now]
   bool get isFuture {
     return this.isAfter(Date.now());
   }
 
-  // bool isLastDayOfMonth(date)
-  // bool isLeapYear(date)
+  /// Is the given date the last day of a month?
+  bool get isLastDayOfMonth {
+    final lastDay = this.nextMonth.startOfMonth.subHours(12).startOfDay;
+    return this.isSameDay(lastDay);
+  }
+
+  /// Is the given date in the leap year?
+  bool get isLeapYear {
+    final year = this.year;
+    return ((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0));
+  }
 
   /// Return true if this date [isBefore] [Date.now]
   bool get isPast {

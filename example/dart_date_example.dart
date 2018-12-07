@@ -4,7 +4,7 @@ main(List<String> args) {
   const pattern = "'Heute ist' dd-MMMM-yyyy";
   final n = Date.now();
   final d = Date.now().format(pattern, "de_DE");
-  final x = Date.parse(pattern, d, locale: "de_DE");
+  final x = Date.parse(d, pattern: pattern, locale: "de_DE");
   print("$d ($x)"); // Heute ist 30-November-2018 (2018-11-30 00:00:00.000)
 
   // ES language is pre-configured;
@@ -24,4 +24,7 @@ main(List<String> args) {
   ]);
   print("Closest to now ($now): $closest (${closest.timeago()})");
   // Closest to now (2018-11-30 21:25:21.092647): 2018-11-28 21:25:21.025275 (2 days ago)
+  print(Date.today is DateTime);
+
+  print(Date.parse("2014-11-20T16:51:30.000Z").toHumanString());
 }

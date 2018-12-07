@@ -1,6 +1,6 @@
 name: dart_date
 description: An inmutable date manipulation library. dart_date provides a comprehensive, simple and consistent toolset for manipulating and parsing Dart dates in pure Dart (to be used in Flutter/Mobile, Web, Server or CLI apps).
-version: 0.0.8
+version: 0.0.9
 homepage: https://github.com/sntiagoma/dart_date
 author: Santiago Montoya Angarita <sntiagoma@gmail.com>
 
