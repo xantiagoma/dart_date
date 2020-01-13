@@ -27,31 +27,30 @@ class Interval {
   }
 
   bool includes(DateTime date) {
-    return ((date.isAfter(this.start) || date.isAtSameMomentAs(this.start)) &&
-        (date.isBefore(this.end) || date.isAtSameMomentAs(this.end)));
+    return ((date.isAfter(start) || date.isAtSameMomentAs(start)) &&
+        (date.isBefore(end) || date.isAtSameMomentAs(end)));
   }
 
   bool contains(Interval interval) {
-    return (this.includes(interval.start) && this.includes(interval.end));
+    return (includes(interval.start) && includes(interval.end));
   }
 
   bool cross(Interval other) {
-    return (this.includes(other.start) || this.includes(other.end));
+    return (includes(other.start) || includes(other.end));
   }
 
   bool equals(Interval other) {
-    return (this.start.isAtSameMomentAs(other.start) &&
-        this.end.isAtSameMomentAs(other.end));
+    return (start.isAtSameMomentAs(other.start) &&
+        end.isAtSameMomentAs(other.end));
   }
 
   Interval union(Interval other) {
-    if (this.cross(other)) {
-      if (this.end.isAfter(other.start) ||
-          this.end.isAtSameMomentAs(other.start)) {
-        return Interval(this.start, other.end);
-      } else if (other.end.isAfter(this.start) ||
-          other.end.isAtSameMomentAs(this.start)) {
-        return Interval(other.start, this.end);
+    if (cross(other)) {
+      if (end.isAfter(other.start) || end.isAtSameMomentAs(other.start)) {
+        return Interval(start, other.end);
+      } else if (other.end.isAfter(start) ||
+          other.end.isAtSameMomentAs(start)) {
+        return Interval(other.start, end);
       } else {
         throw RangeError("Error this: $this; other: $other");
       }
@@ -61,13 +60,12 @@ class Interval {
   }
 
   Interval intersection(Interval other) {
-    if (this.cross(other)) {
-      if (this.end.isAfter(other.start) ||
-          this.end.isAtSameMomentAs(other.start)) {
-        return Interval(other.start, this.end);
-      } else if (other.end.isAfter(this.start) ||
-          other.end.isAtSameMomentAs(this.start)) {
-        return Interval(other.start, this.end);
+    if (cross(other)) {
+      if (end.isAfter(other.start) || end.isAtSameMomentAs(other.start)) {
+        return Interval(other.start, end);
+      } else if (other.end.isAfter(start) ||
+          other.end.isAtSameMomentAs(start)) {
+        return Interval(other.start, end);
       } else {
         throw RangeError("Error this: $this; other: $other");
       }
@@ -81,17 +79,17 @@ class Interval {
       return null;
     } else if (this <= other) {
       // | this | | other |
-      if (this.end.isBefore(other.start)) {
+      if (end.isBefore(other.start)) {
         return this;
       } else {
-        return Interval(this.start, other.start);
+        return Interval(start, other.start);
       }
     } else if (this >= other) {
       // | other | | this |
-      if (other.end.isBefore(this.start)) {
+      if (other.end.isBefore(start)) {
         return this;
       } else {
-        return Interval(other.end, this.end);
+        return Interval(other.end, end);
       }
     } else {
       throw RangeError("Error this: $this; other: $other");
@@ -101,7 +99,7 @@ class Interval {
   List<Interval> symetricDiffetence(Interval other) {
     List<Interval> list = [null, null];
     try {
-      Interval left = this.difference(other);
+      Interval left = difference(other);
       list[0] = left;
     } catch (e) {
       list[0] = null;
@@ -116,18 +114,18 @@ class Interval {
   }
 
   // Operators
-  bool operator <(Interval other) => (this.start.isBefore(other.start));
+  bool operator <(Interval other) => (start.isBefore(other.start));
 
-  bool operator <=(Interval other) => (this.start.isBefore(other.start) ||
-      this.start.isAtSameMomentAs(other.start));
+  bool operator <=(Interval other) =>
+      (start.isBefore(other.start) || start.isAtSameMomentAs(other.start));
 
-  bool operator >(Interval other) => (this.end.isAfter(other.end));
+  bool operator >(Interval other) => (end.isAfter(other.end));
 
   bool operator >=(Interval other) =>
-      (this.end.isAfter(other.end) || this.end.isAtSameMomentAs(other.end));
+      (end.isAfter(other.end) || end.isAtSameMomentAs(other.end));
 
   String toString() {
-    return "<${this.start} | ${this.end} | ${this.duration} >";
+    return "<${start} | ${end} | ${duration} >";
   }
 }
 
@@ -183,42 +181,42 @@ extension Date on DateTime {
 
   /// Get [Date] object as UTC of current object.
   DateTime get toUTC {
-    return this.toUtc();
+    return toUtc();
   }
 
   /// Get [Date] object in LocalTime of current object.
   DateTime get toLocalTime {
-    return this.toLocal();
+    return toLocal();
   }
 
   DateTime get clone => DateTime.fromMicrosecondsSinceEpoch(
-        this.microsecondsSinceEpoch,
-        isUtc: this.isUtc,
+        microsecondsSinceEpoch,
+        isUtc: isUtc,
       );
 
   // /// Add a [Duration] to this date
   // DateTime add(Duration duration) {
-  //   return this.add(duration);
+  //   return add(duration);
   // }
 
   /// Substract a [Duration] to this date
   DateTime subtract(Duration duration) {
-    return this.add(Duration.zero - duration);
+    return add(Duration.zero - duration);
   }
 
   /// Get the difference between this data and other date as a [Duration]
   Duration diff(DateTime other) {
-    return this.difference(other);
+    return difference(other);
   }
 
   /// Add a certain amount of days to this date
   DateTime addDays(int amount) {
-    return this.add(Duration(days: amount));
+    return add(Duration(days: amount));
   }
 
   /// Add a certain amount of hours to this date
   DateTime addHours(int amount) {
-    return this.add(Duration(hours: amount));
+    return add(Duration(hours: amount));
   }
 
   // TODO: this
@@ -228,42 +226,42 @@ extension Date on DateTime {
 
   /// Add a certain amount of milliseconds to this date
   DateTime addMilliseconds(int amount) {
-    return this.add(Duration(milliseconds: amount));
+    return add(Duration(milliseconds: amount));
   }
 
   /// Add a certain amount of microseconds to this date
   DateTime addMicroseconds(int amount) {
-    return this.add(Duration(microseconds: amount));
+    return add(Duration(microseconds: amount));
   }
 
   /// Add a certain amount of minutes to this date
   DateTime addMinutes(int amount) {
-    return this.add(Duration(minutes: amount));
+    return add(Duration(minutes: amount));
   }
 
   /// Add a certain amount of months to this date
   DateTime addMonths(int amount) {
-    return this.clone.setMonth(this.month + amount);
+    return clone.setMonth(month + amount);
   }
 
   /// Add a certain amount of quarters to this date
   DateTime addQuarters(int amount) {
-    return this.addMonths(amount * 3);
+    return addMonths(amount * 3);
   }
 
   /// Add a certain amount of seconds to this date
   DateTime addSeconds(int amount) {
-    return this.add(Duration(seconds: amount));
+    return add(Duration(seconds: amount));
   }
 
   /// Add a certain amount of weeks to this date
   DateTime addWeeks(int amount) {
-    return this.addDays(amount * 7);
+    return addDays(amount * 7);
   }
 
   /// Add a certain amount of years to this date
   DateTime addYears(int amount) {
-    return this.clone.setYear(this.year + amount);
+    return clone.setYear(year + amount);
   }
 
   /// Know if two ranges of dates overlaps
@@ -311,7 +309,7 @@ extension Date on DateTime {
     if (datesArray.length == 0) {
       return null;
     }
-    return datesArray.elementAt(this.closestIndexTo(datesArray));
+    return datesArray.elementAt(closestIndexTo(datesArray));
   }
 
   /**
@@ -323,7 +321,7 @@ extension Date on DateTime {
    * (when this [isAfter] [other]).
    */
   int compare(DateTime other) {
-    return this.compareTo(other);
+    return compareTo(other);
   }
 
   /// Returns true if left [isBefore] than right
@@ -365,32 +363,32 @@ extension Date on DateTime {
 
   /// Difference in microseconds between this date and other
   int differenceInMicroseconds(DateTime other) {
-    return this.diff(other).inMicroseconds;
+    return diff(other).inMicroseconds;
   }
 
   /// Difference in milliseconds between this date and other
   int differenceInMilliseconds(DateTime other) {
-    return this.diff(other).inMilliseconds;
+    return diff(other).inMilliseconds;
   }
 
   /// Difference in minutes between this date and other
   int differenceInMinutes(DateTime other) {
-    return this.diff(other).inMinutes;
+    return diff(other).inMinutes;
   }
 
   /// Difference in seconds between this date and other
   int differenceInSeconds(DateTime other) {
-    return this.diff(other).inSeconds;
+    return diff(other).inSeconds;
   }
 
   /// Difference in hours between this date and other
   int differenceInHours(DateTime other) {
-    return this.diff(other).inHours;
+    return diff(other).inHours;
   }
 
   /// Difference in days between this date and other
   int differenceInDays(DateTime other) {
-    return this.diff(other).inDays;
+    return diff(other).inDays;
   }
 
   // int differenceInMonths(dateLeft, dateRight)
@@ -418,10 +416,10 @@ extension Date on DateTime {
 
   /// Return the array of dates within the specified range.
   Iterable<DateTime> eachDay(DateTime date) sync* {
-    if (this.isSameDay(date)) {
+    if (isSameDay(date)) {
       yield date.startOfDay;
     } else {
-      Duration difference = this.diff(date);
+      Duration difference = diff(date);
       int days = difference.abs().inDays;
       DateTime current = date.startOfDay;
       if (difference.isNegative) {
@@ -440,36 +438,36 @@ extension Date on DateTime {
 
   /// Return the end of a day for this date. The result will be in the local timezone.
   DateTime get endOfDay {
-    return this.clone.setHour(23, 59, 59, 999, 999);
+    return clone.setHour(23, 59, 59, 999, 999);
   }
 
   /// Return the end of the hour for this date. The result will be in the local timezone.
   DateTime get endOfHour {
-    return this.clone.setMinute(59, 59, 999, 999);
+    return clone.setMinute(59, 59, 999, 999);
   }
 
   /// Return the end of ISO week for this date. The result will be in the local timezone.
   DateTime get endOfISOWeek {
-    return this.endOfWeek.nextDay;
+    return endOfWeek.nextDay;
   }
 
   // DateTime endOfISOYear()
 
   /// Return the end of the minute for this date. The result will be in the local timezone.
   DateTime get endOfMinute {
-    return this.clone.setSecond(59, 999, 999);
+    return clone.setSecond(59, 999, 999);
   }
 
   /// Return the end of the month for this date. The result will be in the local timezone.
   DateTime get endOfMonth {
-    return DateTime(this.year, this.month + 1).subMicroseconds(1);
+    return DateTime(year, month + 1).subMicroseconds(1);
   }
 
   // Date endOfQuarter()
 
   /// Return the end of the second for this date. The result will be in the local timezone.
   DateTime get endOfSecond {
-    return this.clone.setMillisecond(999, 999);
+    return clone.setMillisecond(999, 999);
   }
 
   /// Return the end of today. The result will be in the local timezone.
@@ -489,44 +487,44 @@ extension Date on DateTime {
 
   /// Return the end of the week for this date. The result will be in the local timezone.
   DateTime get endOfWeek {
-    return this.nextWeek.startOfWeek.subMicroseconds(1);
+    return nextWeek.startOfWeek.subMicroseconds(1);
   }
 
   /// Return the end of the year for this date. The result will be in the local timezone.
   DateTime get endOfYear {
-    return this.clone.setYear(this.year, DateTime.december).endOfMonth;
+    return clone.setYear(year, DateTime.december).endOfMonth;
   }
 
   /// Get the day of the month of the given date.
   /// The day of the month 1..31.
   int get getDate {
-    return this.day;
+    return day;
   }
 
   /// Get the day of the week of the given date.
   int get getDay {
-    return this.weekday;
+    return weekday;
   }
 
   /// Days since year started. The result will be in the local timezone.
   int get getDayOfYear {
-    return this.diff(this.startOfYear).inDays + 1;
+    return diff(startOfYear).inDays + 1;
   }
 
   /// Days since month started. The result will be in the local timezone.
   int get getDaysInMonth {
-    return this.endOfMonth.diff(this.startOfMonth).inDays + 1;
+    return endOfMonth.diff(startOfMonth).inDays + 1;
   }
 
   /// Number of days in current year
   int get getDaysInYear {
-    return this.endOfYear.diff(this.startOfYear).inDays + 1;
+    return endOfYear.diff(startOfYear).inDays + 1;
   }
 
   /// Get the hours of the given date.
   /// The hour of the day, expressed as in a 24-hour clock 0..23.
   int get getHours {
-    return this.hour;
+    return hour;
   }
 
   // int getISODay(date)
@@ -537,35 +535,35 @@ extension Date on DateTime {
   /// Get the milliseconds of the given date.
   /// The millisecond 0...999.
   int get getMilliseconds {
-    return this.millisecond;
+    return millisecond;
   }
 
   /// Get the microseconds of the given date.
   /// The microsecond 0...999.
   int get getMicroseconds {
-    return this.microsecond;
+    return microsecond;
   }
 
   /// Get the milliseconds since the "Unix epoch" 1970-01-01T00:00:00Z (UTC).
   int get getMillisecondsSinceEpoch {
-    return this.millisecondsSinceEpoch;
+    return millisecondsSinceEpoch;
   }
 
   /// Get the microseconds since the "Unix epoch" 1970-01-01T00:00:00Z (UTC).
   int get getMicrosecondsSinceEpoch {
-    return this.microsecondsSinceEpoch;
+    return microsecondsSinceEpoch;
   }
 
   /// Get the minutes of the given date.
   /// The minute 0...59.
   int get getMinutes {
-    return this.minute;
+    return minute;
   }
 
   /// Get the month of the given date.
   /// The month 1..12.
   int get getMonth {
-    return this.month;
+    return month;
   }
 
   // int getOverlappingDaysInRanges(initialRangeStartDate, initialRangeEndDate, comparedRangeStartDate, comparedRangeEndDate)
@@ -574,22 +572,22 @@ extension Date on DateTime {
   /// Get the seconds of the given date.
   /// The second 0...59.
   int get getSeconds {
-    return this.second;
+    return second;
   }
 
   /// get the numer of milliseconds since epoch
   int get timestamp {
-    return this.millisecondsSinceEpoch;
+    return millisecondsSinceEpoch;
   }
 
   /// get the numer of milliseconds since epoch
   int get getTime {
-    return this.millisecondsSinceEpoch;
+    return millisecondsSinceEpoch;
   }
 
   /// The year
   int get getYear {
-    return this.year;
+    return year;
   }
 
   /// The time zone name.
@@ -597,7 +595,7 @@ extension Date on DateTime {
   /// In the browser or on Unix-like systems commonly returns abbreviations, such as "CET" or "CEST".
   /// On Windows returns the full name, for example "Pacific Standard Time".
   String get getTimeZoneName {
-    return this.timeZoneName;
+    return timeZoneName;
   }
 
   /// The time zone offset, which is the difference between local time and UTC.
@@ -605,23 +603,23 @@ extension Date on DateTime {
   /// Note, that JavaScript, Python and C return the difference between UTC and local time.
   /// Java, C# and Ruby return the difference between local time and UTC.
   Duration get getTimeZoneOffset {
-    return this.timeZoneOffset;
+    return timeZoneOffset;
   }
 
   /// The day of the week monday..sunday.
   /// In accordance with ISO 8601 a week starts with Monday, which has the value 1.
   int get getWeekday {
-    return this.weekday;
+    return weekday;
   }
 
   /// Return true if other [isEqual] or [isAfter] to this date
   bool isSameOrAfter(DateTime other) {
-    return (this == other || this.isAfter(other));
+    return (this == other || isAfter(other));
   }
 
   /// Return true if other [isEqual] or [isBefore] to this date
   bool isSameOrBefore(DateTime other) {
-    return (this == other || this.isBefore(other));
+    return (this == other || isBefore(other));
   }
 
   /// Check if a Object if a [DateTime], use for validation purposes
@@ -631,80 +629,79 @@ extension Date on DateTime {
 
   /// Check if a date is [equals] to other
   bool isEqual(other) {
-    return this.equals(other);
+    return equals(other);
   }
 
   /// Return true if this date day is monday
   bool get isMonday {
-    return this.day == DateTime.monday;
+    return day == DateTime.monday;
   }
 
   /// Return true if this date day is tuesday
   bool get isTuesday {
-    return this.day == DateTime.tuesday;
+    return day == DateTime.tuesday;
   }
 
   /// Return true if this date day is wednesday
   bool get isWednesday {
-    return this.day == DateTime.wednesday;
+    return day == DateTime.wednesday;
   }
 
   /// Return true if this date day is thursday
   bool get isThursday {
-    return this.day == DateTime.thursday;
+    return day == DateTime.thursday;
   }
 
   /// Return true if this date day is friday
   bool get isFriday {
-    return this.day == DateTime.friday;
+    return day == DateTime.friday;
   }
 
   /// Return true if this date day is saturday
   bool get isSaturday {
-    return this.day == DateTime.saturday;
+    return day == DateTime.saturday;
   }
 
   /// Return true if this date day is sunday
   bool get isSunday {
-    return this.day == DateTime.sunday;
+    return day == DateTime.sunday;
   }
 
   /// Is the given date the first day of a month?
   bool get isFirstDayOfMonth {
-    final firstDate = this.startOfMonth;
-    return this.isSameDay(firstDate);
+    final firstDate = startOfMonth;
+    return isSameDay(firstDate);
   }
 
   /// Return true if this date [isAfter] [Date.now]
   bool get isFuture {
-    return this.isAfter(DateTime.now());
+    return isAfter(DateTime.now());
   }
 
   /// Is the given date the last day of a month?
   bool get isLastDayOfMonth {
-    final lastDay = this.nextMonth.startOfMonth.subHours(12).startOfDay;
-    return this.isSameDay(lastDay);
+    final lastDay = nextMonth.startOfMonth.subHours(12).startOfDay;
+    return isSameDay(lastDay);
   }
 
   /// Is the given date in the leap year?
   bool get isLeapYear {
-    final year = this.year;
     return ((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0));
   }
 
   /// Return true if this date [isBefore] [Date.now]
   bool get isPast {
-    return this.isBefore(DateTime.now());
+    return isBefore(DateTime.now());
   }
 
   /// Check if this date is in the same day than other
   bool isSameDay(DateTime other) {
-    return this.startOfDay == other.startOfDay;
+    return startOfDay == other.startOfDay;
   }
 
   /// Check if this date is in the same hour than other
   bool isSameHour(DateTime other) {
-    return this.startOfHour == other.startOfHour;
+    return startOfHour == other.startOfHour;
   }
 
   // bool isSameISOWeek(dateLeft, dateRight)
@@ -712,84 +709,84 @@ extension Date on DateTime {
 
   /// Check if this date is in the same minute than other
   bool isSameMinute(DateTime other) {
-    return this.startOfMinute == other.startOfMinute;
+    return startOfMinute == other.startOfMinute;
   }
 
   /// Check if this date is in the same month than other
   bool isSameMonth(DateTime other) {
-    return this.startOfMonth == other.startOfMonth;
+    return startOfMonth == other.startOfMonth;
   }
 
   // bool isSameQuarter(dateLeft, dateRight)
 
   /// Check if this date is in the same second than other
   bool isSameSecond(DateTime other) {
-    return this.secondsSinceEpoch == other.secondsSinceEpoch;
+    return secondsSinceEpoch == other.secondsSinceEpoch;
   }
 
   // bool isSameWeek(dateLeft, dateRight, [options])
 
   /// Check if this date is in the same year than other
   bool isSameYear(DateTime other) {
-    return this.year == other.year;
+    return year == other.year;
   }
 
   /// Check if this date is in the same hour than [DateTime.now]
   bool get isThisHour {
-    return this.startOfHour == today.startOfHour;
+    return startOfHour == today.startOfHour;
   }
   // bool isThisISOWeek()
   // bool isThisISOYear()
 
   /// Check if this date is in the same minute than [DateTime.now]
   bool get isThisMinute {
-    return this.startOfMinute == today.startOfMinute;
+    return startOfMinute == today.startOfMinute;
   }
 
   /// Check if this date is in the same month than [DateTime.now]
   bool get isThisMonth {
-    return this.isSameMonth(today);
+    return isSameMonth(today);
   }
 
   // bool isThisQuarter()
 
   /// Check if this date is in the same second than [DateTime.now]
   bool get isThisSecond {
-    return this.isSameSecond(today);
+    return isSameSecond(today);
   }
 
   // bool isThisWeek(, [options])
 
   /// Check if this date is in the same year than [DateTime.now]
   bool get isThisYear {
-    return this.isSameYear(today);
+    return isSameYear(today);
   }
 
   // bool isValid()
 
   /// Check if this date is in the same day than [DateTime.today]
   bool get isToday {
-    return this.isSameDay(today);
+    return isSameDay(today);
   }
 
   /// Check if this date is in the same day than [DateTime.tomorrow]
   bool get isTomorrow {
-    return this.isSameDay(tomorrow);
+    return isSameDay(tomorrow);
   }
 
   /// Check if this date is in the same day than [DateTime.yesterday]
   bool get isYesterday {
-    return this.isSameDay(yesterday);
+    return isSameDay(yesterday);
   }
 
   /// Return true if this [DateTime] is set as UTC.
   bool get isUTC {
-    return this.isUtc;
+    return isUtc;
   }
 
   /// Return true if this [DateTime] is a saturday or a sunday
   bool get isWeekend {
-    return (this.day == DateTime.saturday || this.day == DateTime.sunday);
+    return (day == DateTime.saturday || day == DateTime.sunday);
   }
 
   /// Checks if a [DateTime] is within a Rage (two dates that makes an [Interval])
@@ -836,13 +833,13 @@ extension Date on DateTime {
       int microsecond = null]) {
     return DateTime(
         year,
-        month == null ? this.month : month,
-        day == null ? this.day : day,
-        hour == null ? this.hour : hour,
-        minute == null ? this.minute : minute,
-        second == null ? this.second : second,
-        millisecond == null ? this.millisecond : millisecond,
-        microsecond == null ? this.microsecond : microsecond);
+        month == null ? month : month,
+        day == null ? day : day,
+        hour == null ? hour : hour,
+        minute == null ? minute : minute,
+        second == null ? second : second,
+        millisecond == null ? millisecond : millisecond,
+        microsecond == null ? microsecond : microsecond);
   }
 
   /// Change [month] of this date
@@ -861,14 +858,14 @@ extension Date on DateTime {
       int millisecond = null,
       int microsecond = null]) {
     return DateTime(
-        this.year,
+        year,
         month,
-        day == null ? this.day : day,
-        hour == null ? this.hour : hour,
-        minute == null ? this.minute : minute,
-        second == null ? this.second : second,
-        millisecond == null ? this.millisecond : millisecond,
-        microsecond == null ? this.microsecond : microsecond);
+        day == null ? day : day,
+        hour == null ? hour : hour,
+        minute == null ? minute : minute,
+        second == null ? second : second,
+        millisecond == null ? millisecond : millisecond,
+        microsecond == null ? microsecond : microsecond);
   }
 
   /// Change [day] of this date
@@ -885,14 +882,14 @@ extension Date on DateTime {
       int millisecond = null,
       int microsecond = null]) {
     return DateTime(
-        this.year,
-        this.month,
+        year,
+        month,
         day,
-        hour == null ? this.hour : hour,
-        minute == null ? this.minute : minute,
-        second == null ? this.second : second,
-        millisecond == null ? this.millisecond : millisecond,
-        microsecond == null ? this.microsecond : microsecond);
+        hour == null ? hour : hour,
+        minute == null ? minute : minute,
+        second == null ? second : second,
+        millisecond == null ? millisecond : millisecond,
+        microsecond == null ? microsecond : microsecond);
   }
 
   /// Change [hour] of this date
@@ -907,14 +904,14 @@ extension Date on DateTime {
       int millisecond = null,
       int microsecond = null]) {
     return DateTime(
-        this.year,
-        this.month,
-        this.day,
+        year,
+        month,
+        day,
         hour,
-        minute == null ? this.minute : minute,
-        second == null ? this.second : second,
-        millisecond == null ? this.millisecond : millisecond,
-        microsecond == null ? this.microsecond : microsecond);
+        minute == null ? minute : minute,
+        second == null ? second : second,
+        millisecond == null ? millisecond : millisecond,
+        microsecond == null ? microsecond : microsecond);
   }
 
   /// Change [minute] of this date
@@ -925,14 +922,14 @@ extension Date on DateTime {
   DateTime setMinute(int minute,
       [int second = null, int millisecond = null, int microsecond = null]) {
     return DateTime(
-        this.year,
-        this.month,
-        this.day,
-        this.hour,
+        year,
+        month,
+        day,
+        hour,
         minute,
-        second == null ? this.second : second,
-        millisecond == null ? this.millisecond : millisecond,
-        microsecond == null ? this.microsecond : microsecond);
+        second == null ? second : second,
+        millisecond == null ? millisecond : millisecond,
+        microsecond == null ? microsecond : microsecond);
   }
 
   /// Change [second] of this date
@@ -942,68 +939,61 @@ extension Date on DateTime {
   DateTime setSecond(int second,
       [int millisecond = null, int microsecond = null]) {
     return DateTime(
-        this.year,
-        this.month,
-        this.day,
-        this.hour,
-        this.minute,
+        year,
+        month,
+        day,
+        hour,
+        minute,
         second,
-        millisecond == null ? this.millisecond : millisecond,
-        microsecond == null ? this.microsecond : microsecond);
+        millisecond == null ? millisecond : millisecond,
+        microsecond == null ? microsecond : microsecond);
   }
 
   /// Change [millisecond] of this date
   ///
   /// set [microsecond] if you want to change it as well
   DateTime setMillisecond(int millisecond, [int microsecond = null]) {
-    return DateTime(
-        this.year,
-        this.month,
-        this.day,
-        this.hour,
-        this.minute,
-        this.second,
-        millisecond,
-        microsecond == null ? this.microsecond : microsecond);
+    return DateTime(year, month, day, hour, minute, second, millisecond,
+        microsecond == null ? microsecond : microsecond);
   }
 
   /// Change [microsecond] of this date
   DateTime setMicrosecond(int microsecond) {
-    return DateTime(this.year, this.month, this.day, this.hour, this.minute,
-        this.second, this.millisecond, microsecond);
+    return DateTime(
+        year, month, day, hour, minute, second, millisecond, microsecond);
   }
   // DateTime setQuarter(quarter)
 
   /// Get a [DateTime] representing start of Day of this [DateTime] in local time.
   DateTime get startOfDay {
-    return this.clone.setHour(0, 0, 0, 0, 0);
+    return clone.setHour(0, 0, 0, 0, 0);
   }
 
   /// Get a [DateTime] representing start of Hour of this [DateTime] in local time.
   DateTime get startOfHour {
-    return this.clone.setMinute(0, 0, 0, 0);
+    return clone.setMinute(0, 0, 0, 0);
   }
 
   /// Get a [DateTime] representing start of week (ISO week) of this [DateTime] in local time.
   DateTime get startOfISOWeek {
-    return this.startOfWeek.nextDay;
+    return startOfWeek.nextDay;
   }
 
   // DateTime startOfISOYear()
   /// Get a [DateTime] representing start of minute of this [DateTime] in local time.
   DateTime get startOfMinute {
-    return this.clone.setSecond(0, 0, 0);
+    return clone.setSecond(0, 0, 0);
   }
 
   /// Get a [DateTime] representing start of month of this [DateTime] in local time.
   DateTime get startOfMonth {
-    return this.clone.setDay(1, 0, 0, 0, 0, 0);
+    return clone.setDay(1, 0, 0, 0, 0, 0);
   }
 
   // DateTime startOfQuarter()
   /// Get a [DateTime] representing start of second of this [DateTime] in local time.
   DateTime get startOfSecond {
-    return this.clone.setMillisecond(0, 0);
+    return clone.setMillisecond(0, 0);
   }
 
   /// Get a [DateTime] representing start of today of [DateTime.today] in local time.
@@ -1013,121 +1003,121 @@ extension Date on DateTime {
 
   /// Get a [DateTime] representing start of week of this [DateTime] in local time.
   DateTime get startOfWeek {
-    return this.subtract(Duration(days: this.weekday)).startOfDay;
+    return subtract(Duration(days: weekday)).startOfDay;
   }
 
   /// Get a [DateTime] representing start of year of this [DateTime] in local time.
   DateTime get startOfYear {
-    return this.clone.setMonth(DateTime.january, 1, 0, 0, 0, 0, 0);
+    return clone.setMonth(DateTime.january, 1, 0, 0, 0, 0, 0);
   }
 
   /// Subtracts a [Duration] from this [DateTime]
   DateTime sub(Duration duration) {
-    return this.add(Duration.zero - duration);
+    return add(Duration.zero - duration);
   }
 
   /// Subtracts an amout of hours from this [DateTime]
   DateTime subHours(int amount) {
-    return this.addHours(-amount);
+    return addHours(-amount);
   }
 
   /// Subtracts an amout of days from this [DateTime]
   DateTime subDays(int amount) {
-    return this.addDays(-amount);
+    return addDays(-amount);
   }
 
   /// Subtracts an amout of milliseconds from this [DateTime]
   DateTime subMilliseconds(amount) {
-    return this.addMilliseconds(-amount);
+    return addMilliseconds(-amount);
   }
 
   /// Subtracts an amout of microseconds from this [DateTime]
   DateTime subMicroseconds(amount) {
-    return this.addMicroseconds(-amount);
+    return addMicroseconds(-amount);
   }
 
   // DateTime subISOYears(amount)
   /// Subtracts an amout of minutes from this [DateTime]
   DateTime subMinutes(amount) {
-    return this.addMinutes(-amount);
+    return addMinutes(-amount);
   }
 
   /// Subtracts an amout of months from this [DateTime]
   /// Subtracts an amout of months from this [DateTime]
   DateTime subMonths(amount) {
-    return this.addMonths(-amount);
+    return addMonths(-amount);
   }
 
   // DateTime subQuarters(amount)
   /// Subtracts an amout of seconds from this [DateTime]
   DateTime subSeconds(amount) {
-    return this.addSeconds(-amount);
+    return addSeconds(-amount);
   }
 
   // DateTime subWeeks(amount)
   /// Subtracts an amout of years from this [DateTime]
   DateTime subYears(amount) {
-    return this.addYears(-amount);
+    return addYears(-amount);
   }
 
   // Check if two dates are [equals]
   bool equals(DateTime other) {
-    return this.isAtSameMomentAs(other);
+    return isAtSameMomentAs(other);
   }
 
-  bool operator <(DateTime other) => this.isBefore(other);
+  bool operator <(DateTime other) => isBefore(other);
 
   bool operator <=(DateTime other) =>
-      (this.isBefore(other) || this.isAtSameMomentAs(other));
+      (isBefore(other) || isAtSameMomentAs(other));
 
-  bool operator >(DateTime other) => this.isAfter(other);
+  bool operator >(DateTime other) => isAfter(other);
 
   bool operator >=(DateTime other) =>
-      (this.isAfter(other) || this.isAtSameMomentAs(other));
+      (isAfter(other) || isAtSameMomentAs(other));
 
   String toHumanString() {
-    return this.format("E MMM d y H:m:s");
+    return format("E MMM d y H:m:s");
   }
 
   /// The day after
   /// The day after this [DateTime]
   DateTime get nextDay {
-    return this.addDays(1);
+    return addDays(1);
   }
 
   /// The day previous this [DateTime]
   DateTime get previousDay {
-    return this.addDays(-1);
+    return addDays(-1);
   }
 
   /// The month after this [DateTime]
   DateTime get nextMonth {
-    return this.clone.setMonth(this.month + 1);
+    return clone.setMonth(month + 1);
   }
 
   /// The month previous this [DateTime]
   DateTime get previousMonth {
-    return this.clone.setMonth(this.month - 1);
+    return clone.setMonth(month - 1);
   }
 
   /// The year after this [DateTime]
   DateTime get nextYear {
-    return this.clone.setYear(this.year + 1);
+    return clone.setYear(year + 1);
   }
 
   /// The year previous this [DateTime]
   DateTime get previousYear {
-    return this.clone.setYear(this.year - 1);
+    return clone.setYear(year - 1);
   }
 
   /// The week after this [DateTime]
   DateTime get nextWeek {
-    return this.addDays(7);
+    return addDays(7);
   }
 
   /// The week previous this [DateTime]
   DateTime get previousWeek {
-    return this.subDays(7);
+    return subDays(7);
   }
 
   /// Number of seconds since epoch time
@@ -1137,7 +1127,7 @@ extension Date on DateTime {
   /// leap seconds (in ISO 8601: 1970-01-01T00:00:00Z).
   /// Literally speaking the epoch is Unix time 0 (midnight 1/1/1970).
   int get secondsSinceEpoch {
-    return this.millisecondsSinceEpoch ~/ 1000;
+    return millisecondsSinceEpoch ~/ 1000;
   }
 
   /// Format this [DateTime] following the [String pattern]
@@ -1240,13 +1230,13 @@ extension Date on DateTime {
 
   /// Get UTC [DateTime] from this [DateTime]
   DateTime get UTC {
-    return DateTime.fromMicrosecondsSinceEpoch(this.microsecondsSinceEpoch,
+    return DateTime.fromMicrosecondsSinceEpoch(microsecondsSinceEpoch,
         isUtc: true);
   }
 
   /// Get Local [DateTime] from this [DateTime]
   DateTime get Local {
-    return DateTime.fromMicrosecondsSinceEpoch(this.microsecondsSinceEpoch,
+    return DateTime.fromMicrosecondsSinceEpoch(microsecondsSinceEpoch,
         isUtc: false);
   }
 }

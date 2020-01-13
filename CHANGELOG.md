@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- `dartfmt` overwriting
+
 ## 1.0.1
 
 - Include recommendations from `pub.dev`
