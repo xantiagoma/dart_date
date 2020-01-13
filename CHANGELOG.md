@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3
+
+- Delete `this` if not needed and convert functions to `=>` if possible
+
 ## 1.0.2
 
 - `dartfmt` overwriting

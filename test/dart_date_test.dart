@@ -5,7 +5,7 @@ void main() {
   group('Getters', () {
     test('timestamp', () {
       expect(Date.unix(0).timestamp, 0);
-      expect(Date.parse("1996-03-29T11:11:11.011Z").timestamp, 828097871011);
+      expect(Date.parse('1996-03-29T11:11:11.011Z').timestamp, 828097871011);
     });
 
     test('isFirstDayOfMonth', () {
