@@ -191,6 +191,11 @@ extension Date on DateTime {
     return this.toLocal();
   }
 
+  DateTime get clone => DateTime.fromMicrosecondsSinceEpoch(
+        this.microsecondsSinceEpoch,
+        isUtc: this.isUtc,
+      );
+
   // /// Add a [Duration] to this date
   // DateTime add(Duration duration) {
   //   return this.add(duration);
@@ -238,7 +243,7 @@ extension Date on DateTime {
 
   /// Add a certain amount of months to this date
   DateTime addMonths(int amount) {
-    return this.setMonth(this.month + amount);
+    return this.clone.setMonth(this.month + amount);
   }
 
   /// Add a certain amount of quarters to this date
@@ -258,7 +263,7 @@ extension Date on DateTime {
 
   /// Add a certain amount of years to this date
   DateTime addYears(int amount) {
-    return this.setYear(this.year + amount);
+    return this.clone.setYear(this.year + amount);
   }
 
   /// Know if two ranges of dates overlaps
@@ -435,12 +440,12 @@ extension Date on DateTime {
 
   /// Return the end of a day for this date. The result will be in the local timezone.
   DateTime get endOfDay {
-    return this.setHour(23, 59, 59, 999, 999);
+    return this.clone.setHour(23, 59, 59, 999, 999);
   }
 
   /// Return the end of the hour for this date. The result will be in the local timezone.
   DateTime get endOfHour {
-    return this.setMinute(59, 59, 999, 999);
+    return this.clone.setMinute(59, 59, 999, 999);
   }
 
   /// Return the end of ISO week for this date. The result will be in the local timezone.
@@ -452,7 +457,7 @@ extension Date on DateTime {
 
   /// Return the end of the minute for this date. The result will be in the local timezone.
   DateTime get endOfMinute {
-    return this.setSecond(59, 999, 999);
+    return this.clone.setSecond(59, 999, 999);
   }
 
   /// Return the end of the month for this date. The result will be in the local timezone.
@@ -464,7 +469,7 @@ extension Date on DateTime {
 
   /// Return the end of the second for this date. The result will be in the local timezone.
   DateTime get endOfSecond {
-    return this.setMillisecond(999, 999);
+    return this.clone.setMillisecond(999, 999);
   }
 
   /// Return the end of today. The result will be in the local timezone.
@@ -489,7 +494,7 @@ extension Date on DateTime {
 
   /// Return the end of the year for this date. The result will be in the local timezone.
   DateTime get endOfYear {
-    return this.setYear(this.year, DateTime.december).endOfMonth;
+    return this.clone.setYear(this.year, DateTime.december).endOfMonth;
   }
 
   /// Get the day of the month of the given date.
@@ -971,12 +976,12 @@ extension Date on DateTime {
 
   /// Get a [DateTime] representing start of Day of this [DateTime] in local time.
   DateTime get startOfDay {
-    return this.setHour(0, 0, 0, 0, 0);
+    return this.clone.setHour(0, 0, 0, 0, 0);
   }
 
   /// Get a [DateTime] representing start of Hour of this [DateTime] in local time.
   DateTime get startOfHour {
-    return this.setMinute(0, 0, 0, 0);
+    return this.clone.setMinute(0, 0, 0, 0);
   }
 
   /// Get a [DateTime] representing start of week (ISO week) of this [DateTime] in local time.
@@ -987,18 +992,18 @@ extension Date on DateTime {
   // DateTime startOfISOYear()
   /// Get a [DateTime] representing start of minute of this [DateTime] in local time.
   DateTime get startOfMinute {
-    return this.setSecond(0, 0, 0);
+    return this.clone.setSecond(0, 0, 0);
   }
 
   /// Get a [DateTime] representing start of month of this [DateTime] in local time.
   DateTime get startOfMonth {
-    return this.setDay(1, 0, 0, 0, 0, 0);
+    return this.clone.setDay(1, 0, 0, 0, 0, 0);
   }
 
   // DateTime startOfQuarter()
   /// Get a [DateTime] representing start of second of this [DateTime] in local time.
   DateTime get startOfSecond {
-    return this.setMillisecond(0, 0);
+    return this.clone.setMillisecond(0, 0);
   }
 
   /// Get a [DateTime] representing start of today of [DateTime.today] in local time.
@@ -1013,7 +1018,7 @@ extension Date on DateTime {
 
   /// Get a [DateTime] representing start of year of this [DateTime] in local time.
   DateTime get startOfYear {
-    return this.setMonth(DateTime.january, 1, 0, 0, 0, 0, 0);
+    return this.clone.setMonth(DateTime.january, 1, 0, 0, 0, 0, 0);
   }
 
   /// Subtracts a [Duration] from this [DateTime]
@@ -1097,22 +1102,22 @@ extension Date on DateTime {
 
   /// The month after this [DateTime]
   DateTime get nextMonth {
-    return this.setMonth(this.month + 1);
+    return this.clone.setMonth(this.month + 1);
   }
 
   /// The month previous this [DateTime]
   DateTime get previousMonth {
-    return this.setMonth(this.month - 1);
+    return this.clone.setMonth(this.month - 1);
   }
 
   /// The year after this [DateTime]
   DateTime get nextYear {
-    return this.setYear(this.year + 1);
+    return this.clone.setYear(this.year + 1);
   }
 
   /// The year previous this [DateTime]
   DateTime get previousYear {
-    return this.setYear(this.year - 1);
+    return this.clone.setYear(this.year - 1);
   }
 
   /// The week after this [DateTime]
