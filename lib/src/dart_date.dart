@@ -133,7 +133,7 @@ extension Date on DateTime {
   /// Transforms a date that follows a pattern from a [String] representation to a [DateTime] object
   static DateTime parse(
     String dateString, {
-    String pattern = null,
+    String pattern,
     String locale = 'en_US',
     bool isUTC = false,
   }) {
@@ -239,11 +239,11 @@ extension Date on DateTime {
       return date.difference(this).abs();
     });
 
-    if (datesArray.length == 0) {
+    if (datesArray.isEmpty) {
       return null;
     }
 
-    int index = 0;
+    var index = 0;
     for (var i = 0; i < differences.length; i++) {
       if (differences.elementAt(i) < differences.elementAt(index)) {
         index = i;
@@ -254,20 +254,17 @@ extension Date on DateTime {
 
   /// Get closest day to current one, returns null if empty [Iterable] is passed as argument
   DateTime closestTo(Iterable<DateTime> datesArray) {
-    if (datesArray.length == 0) {
+    if (datesArray.isEmpty) {
       return null;
     }
     return datesArray.elementAt(closestIndexTo(datesArray));
   }
 
-  /**
-   * Compares this Date object to [other],
-   * returning zero if the values are equal.
-   *
-   * Returns a negative value if this Date [isBefore] [other]. It returns 0
-   * if it [isAtSameMomentAs] [other], and returns a positive value otherwise
-   * (when this [isAfter] [other]).
-   */
+  /// Compares this Date object to [other],
+  /// returning zero if the values are equal.
+  /// Returns a negative value if this Date [isBefore] [other]. It returns 0
+  /// if it [isAtSameMomentAs] [other], and returns a positive value otherwise
+  /// (when this [isAfter] [other]).
   int compare(DateTime other) => compareTo(other);
 
   /// Returns true if left [isBefore] than right
@@ -630,13 +627,13 @@ extension Date on DateTime {
   /// set [microsecond] if you want to change it as well
   DateTime setYear(
     int year, [
-    int month = null,
-    int day = null,
-    int hour = null,
-    int minute = null,
-    int second = null,
-    int millisecond = null,
-    int microsecond = null,
+    int month,
+    int day,
+    int hour,
+    int minute,
+    int second,
+    int millisecond,
+    int microsecond,
   ]) =>
       DateTime(
         year,
@@ -659,12 +656,12 @@ extension Date on DateTime {
   /// set [microsecond] if you want to change it as well
   DateTime setMonth(
     int month, [
-    int day = null,
-    int hour = null,
-    int minute = null,
-    int second = null,
-    int millisecond = null,
-    int microsecond = null,
+    int day,
+    int hour,
+    int minute,
+    int second,
+    int millisecond,
+    int microsecond,
   ]) =>
       DateTime(
         year,
@@ -686,11 +683,11 @@ extension Date on DateTime {
   /// set [microsecond] if you want to change it as well
   DateTime setDay(
     int day, [
-    int hour = null,
-    int minute = null,
-    int second = null,
-    int millisecond = null,
-    int microsecond = null,
+    int hour,
+    int minute,
+    int second,
+    int millisecond,
+    int microsecond,
   ]) =>
       DateTime(
         year,
@@ -711,10 +708,10 @@ extension Date on DateTime {
   /// set [microsecond] if you want to change it as well
   DateTime setHour(
     int hour, [
-    int minute = null,
-    int second = null,
-    int millisecond = null,
-    int microsecond = null,
+    int minute,
+    int second,
+    int millisecond,
+    int microsecond,
   ]) =>
       DateTime(
         year,
@@ -734,9 +731,9 @@ extension Date on DateTime {
   /// set [microsecond] if you want to change it as well
   DateTime setMinute(
     int minute, [
-    int second = null,
-    int millisecond = null,
-    int microsecond = null,
+    int second,
+    int millisecond,
+    int microsecond,
   ]) =>
       DateTime(
         year,
@@ -755,8 +752,8 @@ extension Date on DateTime {
   /// set [microsecond] if you want to change it as well
   DateTime setSecond(
     int second, [
-    int millisecond = null,
-    int microsecond = null,
+    int millisecond,
+    int microsecond,
   ]) =>
       DateTime(
         year,
@@ -774,7 +771,7 @@ extension Date on DateTime {
   /// set [microsecond] if you want to change it as well
   DateTime setMillisecond(
     int millisecond, [
-    int microsecond = null,
+    int microsecond,
   ]) =>
       DateTime(
         year,
