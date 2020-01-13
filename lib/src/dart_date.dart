@@ -8,22 +8,22 @@ class Interval {
 
   Interval(DateTime start, DateTime end) {
     if (start.isAfter(end)) {
-      throw RangeError("Invalid Range");
+      throw RangeError('Invalid Range');
     }
     _start = start;
     _duration = end.difference(start);
   }
 
   Duration get duration {
-    return this._duration;
+    return _duration;
   }
 
   DateTime get start {
-    return this._start;
+    return _start;
   }
 
   DateTime get end {
-    return this._start.add(this._duration);
+    return _start.add(_duration);
   }
 
   bool includes(DateTime date) {
