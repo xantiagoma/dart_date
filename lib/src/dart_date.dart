@@ -85,16 +85,14 @@ class Interval {
   }
 
   List<Interval> symetricDiffetence(Interval other) {
-    List<Interval> list = [null, null];
+    final list = <Interval>[null, null];
     try {
-      Interval left = difference(other);
-      list[0] = left;
+      list[0] = difference(other);
     } catch (e) {
       list[0] = null;
     }
     try {
-      Interval right = other.difference(this);
-      list[1] = right;
+      list[1] = other.difference(this);
     } catch (e) {
       list[1] = null;
     }
@@ -112,6 +110,7 @@ class Interval {
   bool operator >=(Interval other) =>
       (end.isAfter(other.end) || end.isAtSameMomentAs(other.end));
 
+  @override
   String toString() => '<${start} | ${end} | ${duration} >';
 }
 
@@ -124,7 +123,7 @@ extension Date on DateTime {
   /// Literally speaking the epoch is Unix time 0 (midnight 1/1/1970).
   static DateTime fromSecondsSinceEpoch(
     int secondsSinceEpoch, {
-    bool isUtc: false,
+    bool isUtc = false,
   }) =>
       DateTime.fromMillisecondsSinceEpoch(
         secondsSinceEpoch * 1000,
@@ -139,10 +138,9 @@ extension Date on DateTime {
     bool isUTC = false,
   }) {
     initializeDateFormatting();
-    DateTime date = pattern == null
+    return pattern == null
         ? DateTime.parse(dateString)
         : DateFormat(pattern, locale).parse(dateString, isUTC);
-    return date;
   }
 
   /// Create a [Date] object from a Unix timestamp
@@ -229,15 +227,15 @@ extension Date on DateTime {
       throw RangeError('Not valid compareRange range');
     }
 
-    Interval initial = Interval(initialRangeStartDate, initialRangeEndDate);
-    Interval compared = Interval(comparedRangeStartDate, comparedRangeEndDate);
+    final initial = Interval(initialRangeStartDate, initialRangeEndDate);
+    final compared = Interval(comparedRangeStartDate, comparedRangeEndDate);
 
     return initial.cross(compared) || compared.cross(initial);
   }
 
   /// Get index of the closest day to current one, returns null if empty [Iterable] is passed as argument
   int closestIndexTo(Iterable<DateTime> datesArray) {
-    var differences = datesArray.map((date) {
+    final differences = datesArray.map((date) {
       return date.difference(this).abs();
     });
 
@@ -351,16 +349,16 @@ extension Date on DateTime {
     if (isSameDay(date)) {
       yield date.startOfDay;
     } else {
-      Duration difference = diff(date);
-      int days = difference.abs().inDays;
-      DateTime current = date.startOfDay;
+      final difference = diff(date);
+      final days = difference.abs().inDays;
+      var current = date.startOfDay;
       if (difference.isNegative) {
-        for (int i = 0; i < days; i++) {
+        for (var i = 0; i < days; i++) {
           yield current;
           current = current.nextDay;
         }
       } else {
-        for (int i = 0; i < days; i++) {
+        for (var i = 0; i < days; i++) {
           yield current;
           current = current.nextDay;
         }
