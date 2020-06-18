@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.6
+
+- Improve documentation
+- Add extension operators on DateTime and Duration
+
 ## 1.0.5
 
 - same `1.0.4`

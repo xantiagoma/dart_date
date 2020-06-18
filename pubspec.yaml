@@ -1,10 +1,10 @@
 name: dart_date
 description: Date manipulation library. DateTime extensions. Also includes an Interval object.
-version: 1.0.5
+version: 1.0.6
 homepage: https://github.com/sntiagoma/dart_date
 
 environment:
-  sdk: '>=2.6.0 <3.0.0'
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   intl: ^0.16.1

@@ -1008,4 +1008,30 @@ extension Date on DateTime {
         microsecondsSinceEpoch,
         isUtc: false,
       );
+
+  DateTime operator -(Duration other) {
+    return this.subtract(other);
+  }
+
+  DateTime operator +(Duration other) {
+    return this.add(other);
+  }
+}
+
+extension Duration_ on Duration {
+  Duration operator -(Duration other) {
+    return Duration(microseconds: this.inMicroseconds - other.inMicroseconds);
+  }
+
+  Duration operator +(Duration other) {
+    return Duration(microseconds: this.inMicroseconds + other.inMicroseconds);
+  }
+
+  Duration operator *(num other) {
+    return Duration(microseconds: (this.inMicroseconds * other).round());
+  }
+
+  Duration operator /(num other) {
+    return Duration(microseconds: (this.inMicroseconds / other).round());
+  }
 }
