@@ -107,6 +107,10 @@ getTimeZoneName → String
 getTimeZoneOffset → Duration
 getWeekday → int
 getYear → int
+getWeekYear → int
+getWeek → int
+getISOWeek → int
+getISOWeeksInYear → int
 isFirstDayOfMonth → bool
 isFriday → bool
 isFuture → bool
@@ -147,6 +151,8 @@ startOfMonth → DateTime
 startOfSecond → DateTime
 startOfWeek → DateTime
 startOfYear → DateTime
+startOfWeekYear → DateTime
+startOfISOWeekYear → DateTime
 timestamp → int
 toLocalTime → DateTime
 toUTC → DateTime

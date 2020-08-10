@@ -21,23 +21,19 @@ class Interval {
   DateTime get end => _start.add(_duration);
 
   bool includes(DateTime date) =>
-      ((date.isAfter(start) || date.isAtSameMomentAs(start)) &&
-          (date.isBefore(end) || date.isAtSameMomentAs(end)));
+      ((date.isAfter(start) || date.isAtSameMomentAs(start)) && (date.isBefore(end) || date.isAtSameMomentAs(end)));
 
-  bool contains(Interval interval) =>
-      (includes(interval.start) && includes(interval.end));
+  bool contains(Interval interval) => (includes(interval.start) && includes(interval.end));
 
   bool cross(Interval other) => (includes(other.start) || includes(other.end));
 
-  bool equals(Interval other) =>
-      (start.isAtSameMomentAs(other.start) && end.isAtSameMomentAs(other.end));
+  bool equals(Interval other) => (start.isAtSameMomentAs(other.start) && end.isAtSameMomentAs(other.end));
 
   Interval union(Interval other) {
     if (cross(other)) {
       if (end.isAfter(other.start) || end.isAtSameMomentAs(other.start)) {
         return Interval(start, other.end);
-      } else if (other.end.isAfter(start) ||
-          other.end.isAtSameMomentAs(start)) {
+      } else if (other.end.isAfter(start) || other.end.isAtSameMomentAs(start)) {
         return Interval(other.start, end);
       } else {
         throw RangeError('Error this: $this; other: $other');
@@ -51,8 +47,7 @@ class Interval {
     if (cross(other)) {
       if (end.isAfter(other.start) || end.isAtSameMomentAs(other.start)) {
         return Interval(other.start, end);
-      } else if (other.end.isAfter(start) ||
-          other.end.isAtSameMomentAs(start)) {
+      } else if (other.end.isAfter(start) || other.end.isAtSameMomentAs(start)) {
         return Interval(other.start, end);
       } else {
         throw RangeError('Error this: $this; other: $other');
@@ -102,17 +97,17 @@ class Interval {
   // Operators
   bool operator <(Interval other) => (start.isBefore(other.start));
 
-  bool operator <=(Interval other) =>
-      (start.isBefore(other.start) || start.isAtSameMomentAs(other.start));
+  bool operator <=(Interval other) => (start.isBefore(other.start) || start.isAtSameMomentAs(other.start));
 
   bool operator >(Interval other) => (end.isAfter(other.end));
 
-  bool operator >=(Interval other) =>
-      (end.isAfter(other.end) || end.isAtSameMomentAs(other.end));
+  bool operator >=(Interval other) => (end.isAfter(other.end) || end.isAtSameMomentAs(other.end));
 
   @override
   String toString() => '<${start} | ${end} | ${duration} >';
 }
+
+const int MILLISECONDS_IN_WEEK = 604800000;
 
 extension Date on DateTime {
   /// Number of seconds since epoch time / A.K.A Unix timestamp
@@ -138,9 +133,7 @@ extension Date on DateTime {
     bool isUTC = false,
   }) {
     initializeDateFormatting();
-    return pattern == null
-        ? DateTime.parse(dateString)
-        : DateFormat(pattern, locale).parse(dateString, isUTC);
+    return pattern == null ? DateTime.parse(dateString) : DateFormat(pattern, locale).parse(dateString, isUTC);
   }
 
   /// Create a [Date] object from a Unix timestamp
@@ -268,12 +261,10 @@ extension Date on DateTime {
   int compare(DateTime other) => compareTo(other);
 
   /// Returns true if left [isBefore] than right
-  static DateTime min(DateTime left, DateTime right) =>
-      (left < right) ? left : right;
+  static DateTime min(DateTime left, DateTime right) => (left < right) ? left : right;
 
   /// Returns true if left [isAfter] than right
-  static DateTime max(DateTime left, DateTime right) =>
-      (left < right) ? right : left;
+  static DateTime max(DateTime left, DateTime right) => (left < right) ? right : left;
 
   /// Compare the two dates and return 1 if the first date [isAfter] the second,
   /// -1 if the first date [isBefore] the second or 0 first date [isEqual] the second.
@@ -289,8 +280,7 @@ extension Date on DateTime {
 
   /// Compare the two dates and return -1 if the first date [isAfter] the second,
   /// 1 if the first date [isBefore] the second or 0 first date [isEqual] the second.
-  static int compareDesc(DateTime dateLeft, DateTime dateRight) =>
-      (-1) * compareAsc(dateLeft, dateRight);
+  static int compareDesc(DateTime dateLeft, DateTime dateRight) => (-1) * compareAsc(dateLeft, dateRight);
 
   // int differenceInCalendarDays(dateLeft, dateRight)
   // int differenceInCalendarISOWeeks(dateLeft, dateRight)
@@ -333,8 +323,7 @@ extension Date on DateTime {
   /// - If [allowFromNow] is passed, format will use the From prefix, ie. a date
   ///   5 minutes from now in 'en' locale will display as '5 minutes from now'
   /// If locales was not loaded previously en would be used use timeago.setLocaleMessages to set them
-  String timeago({String locale, DateTime clock, bool allowFromNow}) =>
-      timeago_lib.format(
+  String timeago({String locale, DateTime clock, bool allowFromNow}) => timeago_lib.format(
         this,
         locale: locale,
         clock: clock,
@@ -421,8 +410,6 @@ extension Date on DateTime {
   int get getHours => hour;
 
   // int getISODay(date)
-  // int getISOWeek(date)
-  // int getISOWeeksInYear(date)
   // int getISOYear(date)
 
   /// Get the milliseconds of the given date.
@@ -479,6 +466,41 @@ extension Date on DateTime {
   /// In accordance with ISO 8601 a week starts with Monday, which has the value 1.
   int get getWeekday => weekday;
 
+  /// Get the week index
+  int get getWeek {
+    Duration diff = startOfWeek.difference(startOfWeekYear);
+
+    // Round the number of days to the nearest integer
+    // because the number of milliseconds in a week is not constant
+    // (e.g. it's different in the week of the daylight saving time clock shift)
+    return ((diff.inMilliseconds / MILLISECONDS_IN_WEEK) + 1).round();
+  }
+
+  /// Get the ISO week index
+  int get getISOWeek {
+    Duration diff = startOfISOWeek.difference(startOfISOWeekYear);
+
+    // Round the number of days to the nearest integer
+    // because the number of milliseconds in a week is not constant
+    // (e.g. it's different in the week of the daylight saving time clock shift)
+    return ((diff.inMilliseconds / MILLISECONDS_IN_WEEK) + 1).round();
+  }
+
+  /// Get the local week-numbering year
+  int get getWeekYear {
+    var startOfNextYear = DateTime(year + 1).startOfWeek;
+    if (millisecondsSinceEpoch >= startOfNextYear.millisecondsSinceEpoch) {
+      return year + 1;
+    } else {
+      var startOfThisYear = DateTime(year).startOfWeek;
+      if (millisecondsSinceEpoch >= startOfThisYear.millisecondsSinceEpoch) {
+        return year;
+      } else {
+        return year - 1;
+      }
+    }
+  }
+
   /// Return true if other [isEqual] or [isAfter] to this date
   bool isSameOrAfter(DateTime other) => (this == other || isAfter(other));
 
@@ -519,13 +541,10 @@ extension Date on DateTime {
   bool get isFuture => isAfter(DateTime.now());
 
   /// Is the given date the last day of a month?
-  bool get isLastDayOfMonth => isSameDay(
-        nextMonth.startOfMonth.subHours(12).startOfDay,
-      );
+  bool get isLastDayOfMonth => isSameDay(nextMonth.startOfMonth.subHours(12).startOfDay);
 
   /// Is the given date in the leap year?
-  bool get isLeapYear =>
-      ((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0));
+  bool get isLeapYear => ((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0));
 
   /// Return true if this date [isBefore] [Date.now]
   bool get isPast => isBefore(DateTime.now());
@@ -548,8 +567,7 @@ extension Date on DateTime {
   // bool isSameQuarter(dateLeft, dateRight)
 
   /// Check if this date is in the same second than other
-  bool isSameSecond(DateTime other) =>
-      secondsSinceEpoch == other.secondsSinceEpoch;
+  bool isSameSecond(DateTime other) => secondsSinceEpoch == other.secondsSinceEpoch;
 
   // bool isSameWeek(dateLeft, dateRight, [options])
 
@@ -558,6 +576,7 @@ extension Date on DateTime {
 
   /// Check if this date is in the same hour than [DateTime.now]
   bool get isThisHour => startOfHour == today.startOfHour;
+
   // bool isThisISOWeek()
   // bool isThisISOYear()
 
@@ -595,8 +614,7 @@ extension Date on DateTime {
   bool get isWeekend => (day == DateTime.saturday || day == DateTime.sunday);
 
   /// Checks if a [DateTime] is within a Rage (two dates that makes an [Interval])
-  bool isWithinRange(DateTime startDate, DateTime endDate) =>
-      Interval(startDate, endDate).includes(this);
+  bool isWithinRange(DateTime startDate, DateTime endDate) => Interval(startDate, endDate).includes(this);
 
   /// Checks if a [DateTime] is within an [Interval]
   bool isWithinInterval(Interval interval) => interval.includes(this);
@@ -811,6 +829,7 @@ extension Date on DateTime {
   DateTime get startOfISOWeek => startOfWeek.nextDay;
 
   // DateTime startOfISOYear()
+
   /// Get a [DateTime] representing start of minute of this [DateTime] in local time.
   DateTime get startOfMinute => clone.setSecond(0, 0, 0);
 
@@ -828,8 +847,24 @@ extension Date on DateTime {
   DateTime get startOfWeek => subtract(Duration(days: weekday)).startOfDay;
 
   /// Get a [DateTime] representing start of year of this [DateTime] in local time.
-  DateTime get startOfYear =>
-      clone.setMonth(DateTime.january, 1, 0, 0, 0, 0, 0);
+  DateTime get startOfYear => clone.setMonth(DateTime.january, 1, 0, 0, 0, 0, 0);
+
+  /// Get the start of a local week-numbering year
+  DateTime get startOfWeekYear => startOfYear.startOfWeek;
+
+  /// Get the start of a local week-numbering year
+  DateTime get startOfISOWeekYear => DateTime(year, DateTime.january, 4).startOfISOWeek;
+
+  /// Get the number of weeks in an ISO week-numbering year
+  int get getISOWeeksInYear {
+    var thisYear = startOfISOWeekYear;
+    var nextYear = thisYear.addWeeks(60).startOfISOWeekYear;
+    var diff = nextYear.difference(thisYear);
+    // Round the number of weeks to the nearest integer
+    // because the number of milliseconds in a week is not constant
+    // (e.g. it's different in the week of the daylight saving time clock shift)
+    return (diff.inMilliseconds / MILLISECONDS_IN_WEEK).round();
+  }
 
   /// Subtracts a [Duration] from this [DateTime]
   DateTime sub(Duration duration) => add(Duration.zero - duration);
@@ -866,13 +901,11 @@ extension Date on DateTime {
 
   bool operator <(DateTime other) => isBefore(other);
 
-  bool operator <=(DateTime other) =>
-      (isBefore(other) || isAtSameMomentAs(other));
+  bool operator <=(DateTime other) => (isBefore(other) || isAtSameMomentAs(other));
 
   bool operator >(DateTime other) => isAfter(other);
 
-  bool operator >=(DateTime other) =>
-      (isAfter(other) || isAtSameMomentAs(other));
+  bool operator >=(DateTime other) => (isAfter(other) || isAtSameMomentAs(other));
 
   String toHumanString() => format('E MMM d y H:m:s');
 
