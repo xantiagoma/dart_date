@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.7
+
+- Add getWeekYear, getWeek, getISOWeek, getISOWeeksInYear, startOfWeekYear, startOfISOWeekYear
+- Merged PR: https://github.com/xantiagoma/dart_date/pull/2
+
 ## 1.0.6
 
 - Improve documentation
