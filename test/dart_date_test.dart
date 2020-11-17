@@ -10,19 +10,36 @@ void main() {
 
     test('isFirstDayOfMonth', () {
       expect(DateTime(2011, 2, 1, 11).isFirstDayOfMonth, true);
-      expect(Date.parse('November 01 2018, 9:14:29 PM', pattern: 'MMMM dd y, h:mm:ss a').isFirstDayOfMonth, true);
-      expect(Date.parse('November 30 2011, 0:14:29 PM', pattern: 'MMMM dd y, h:mm:ss a').isFirstDayOfMonth, false);
+      expect(
+          Date.parse('November 01 2018, 9:14:29 PM',
+                  pattern: 'MMMM dd y, h:mm:ss a')
+              .isFirstDayOfMonth,
+          true);
+      expect(
+          Date.parse('November 30 2011, 0:14:29 PM',
+                  pattern: 'MMMM dd y, h:mm:ss a')
+              .isFirstDayOfMonth,
+          false);
     });
 
     test('isLastDayOfMonth', () {
       expect(DateTime(2011, 2, 1, 11).isLastDayOfMonth, false);
-      expect(Date.parse('November 01 2018, 9:14:29 PM', pattern: 'MMMM dd y, h:mm:ss a').isLastDayOfMonth, false);
-      expect(Date.parse('November 30 2011, 0:14:29 PM', pattern: 'MMMM dd y, h:mm:ss a').isLastDayOfMonth, true);
+      expect(
+          Date.parse('November 01 2018, 9:14:29 PM',
+                  pattern: 'MMMM dd y, h:mm:ss a')
+              .isLastDayOfMonth,
+          false);
+      expect(
+          Date.parse('November 30 2011, 0:14:29 PM',
+                  pattern: 'MMMM dd y, h:mm:ss a')
+              .isLastDayOfMonth,
+          true);
     });
 
     test('isLeapYear', () {
       expect(DateTime(2011, 2, 1, 11).isLeapYear, false);
-      expect(Date.parse('September 12 2012', pattern: 'MMMM dd y').isLeapYear, true);
+      expect(Date.parse('September 12 2012', pattern: 'MMMM dd y').isLeapYear,
+          true);
     });
   });
 
@@ -56,23 +73,28 @@ void main() {
     });
 
     test('startOfWeekYear', () {
-      expect(DateTime(2005, DateTime.july, 2).startOfWeekYear, DateTime(2004, DateTime.december, 26));
+      expect(DateTime(2005, DateTime.july, 2).startOfWeekYear,
+          DateTime(2004, DateTime.december, 26));
     });
 
     test('startOfWeekYearBefore100AD', () {
-      expect(DateTime(9, DateTime.january, 1).startOfWeekYear, DateTime(8, DateTime.december, 28));
+      expect(DateTime(9, DateTime.january, 1).startOfWeekYear,
+          DateTime(8, DateTime.december, 28));
     });
 
     test('startOfISOWeekYear', () {
-      expect(DateTime(2005, DateTime.july, 2).startOfISOWeekYear, DateTime(2005, DateTime.january, 3));
+      expect(DateTime(2005, DateTime.july, 2).startOfISOWeekYear,
+          DateTime(2005, DateTime.january, 3));
     });
 
     test('startOfISOWeekYearOnFirstJanuary', () {
-      expect(DateTime(2007, DateTime.february, 10).startOfISOWeekYear, DateTime(2007, DateTime.january, 1));
+      expect(DateTime(2007, DateTime.february, 10).startOfISOWeekYear,
+          DateTime(2007, DateTime.january, 1));
     });
 
     test('startOfISOWeekYearBefore100AD', () {
-      expect(DateTime(9, DateTime.january, 1).startOfISOWeekYear, DateTime(8, DateTime.december, 29));
+      expect(DateTime(9, DateTime.january, 1).startOfISOWeekYear,
+          DateTime(8, DateTime.december, 29));
     });
 
     test('getISOWeeksInYear', () {

@@ -1,9 +1,13 @@
 # Changelog
 
+## 1.0.8
+
+- Fix isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday
+
 ## 1.0.7
 
 - Add getWeekYear, getWeek, getISOWeek, getISOWeeksInYear, startOfWeekYear, startOfISOWeekYear
-- Merged PR: https://github.com/xantiagoma/dart_date/pull/2
+- Merged PR: //github.com/xantiagoma/dart_date/pull/2
 
 ## 1.0.6
 
