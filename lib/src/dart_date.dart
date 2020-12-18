@@ -861,7 +861,7 @@ extension Date on DateTime {
   static DateTime get startOfToday => today.startOfDay;
 
   /// Get a [DateTime] representing start of week of this [DateTime] in local time.
-  DateTime get startOfWeek => subtract(Duration(days: weekday)).startOfDay;
+  DateTime get startOfWeek => subtract(Duration(days: weekday - 1)).startOfDay;
 
   /// Get a [DateTime] representing start of year of this [DateTime] in local time.
   DateTime get startOfYear =>
