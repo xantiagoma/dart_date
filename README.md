@@ -133,7 +133,7 @@ isUTC → bool
 isWednesday → bool
 isWeekend → bool
 isYesterday → bool
-Local → DateTime
+local → DateTime
 nextDay → DateTime
 nextMonth → DateTime
 nextWeek → DateTime
@@ -156,7 +156,7 @@ startOfISOWeekYear → DateTime
 timestamp → int
 toLocalTime → DateTime
 toUTC → DateTime
-UTC → DateTime
+utc → DateTime
 ```
 
 ### Methods
