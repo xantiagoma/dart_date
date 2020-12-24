@@ -18,7 +18,7 @@ main(List<String> args) {
   final en_Format = DateTime.now().format('MMMM dd y, h:mm:ss a');
   print("EN (Format): $en_Format");
 
-  final utc = DateTime(2006, 6, 6, 6, 6, 6, 6, 6).UTC;
+  final utc = DateTime(2006, 6, 6, 6, 6, 6, 6, 6).utc;
   print(".UTC: $utc");
 
   var now = DateTime.now();

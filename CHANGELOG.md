@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.9
+
+- Rename `UTC` to `utc` & `Local` to `local` to follow dart analysis
+- Changes in [PR #6](https://github.com/xantiagoma/dart_date/pull/6)
+- Add optional `ignoreDaylightSavings` to `add*` methods
+
 ## 1.0.8
 
 - Fix isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday
