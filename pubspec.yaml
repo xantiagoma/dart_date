@@ -1,6 +1,6 @@
 name: dart_date
 description: Date manipulation library. DateTime extensions. Also includes an Interval object.
-version: 1.0.9
+version: 1.0.10
 homepage: https://github.com/xantiagoma/dart_date
 
 environment:
