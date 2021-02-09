@@ -3,8 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago_lib;
 
 class Interval {
-  DateTime _start;
-  Duration _duration;
+  late final DateTime _start;
+  late final Duration _duration;
 
   Interval(DateTime start, DateTime end) {
     if (start.isAfter(end)) {
@@ -20,19 +20,28 @@ class Interval {
 
   DateTime get end => _start.add(_duration);
 
-  bool includes(DateTime date) => (date.isAfter(start) || date.isAtSameMomentAs(start)) && (date.isBefore(end) || date.isAtSameMomentAs(end));
+  Interval setStart(DateTime val) => Interval(val, end);
+  Interval setEnd(DateTime val) => Interval(start, val);
+  Interval setDuration(Duration val) => Interval(start, start.add(duration));
 
-  bool contains(Interval interval) => includes(interval.start) && includes(interval.end);
+  bool includes(DateTime date) =>
+      (date.isAfter(start) || date.isAtSameMomentAs(start)) &&
+      (date.isBefore(end) || date.isAtSameMomentAs(end));
+
+  bool contains(Interval interval) =>
+      includes(interval.start) && includes(interval.end);
 
   bool cross(Interval other) => includes(other.start) || includes(other.end);
 
-  bool equals(Interval other) => start.isAtSameMomentAs(other.start) && end.isAtSameMomentAs(other.end);
+  bool equals(Interval other) =>
+      start.isAtSameMomentAs(other.start) && end.isAtSameMomentAs(other.end);
 
   Interval union(Interval other) {
     if (cross(other)) {
       if (end.isAfter(other.start) || end.isAtSameMomentAs(other.start)) {
         return Interval(start, other.end);
-      } else if (other.end.isAfter(start) || other.end.isAtSameMomentAs(start)) {
+      } else if (other.end.isAfter(start) ||
+          other.end.isAtSameMomentAs(start)) {
         return Interval(other.start, end);
       } else {
         throw RangeError('Error this: $this; other: $other');
@@ -46,7 +55,8 @@ class Interval {
     if (cross(other)) {
       if (end.isAfter(other.start) || end.isAtSameMomentAs(other.start)) {
         return Interval(other.start, end);
-      } else if (other.end.isAfter(start) || other.end.isAtSameMomentAs(start)) {
+      } else if (other.end.isAfter(start) ||
+          other.end.isAtSameMomentAs(start)) {
         return Interval(other.start, end);
       } else {
         throw RangeError('Error this: $this; other: $other');
@@ -56,7 +66,7 @@ class Interval {
     }
   }
 
-  Interval difference(Interval other) {
+  Interval? difference(Interval other) {
     if (other == this) {
       return null;
     } else if (this <= other) {
@@ -78,8 +88,8 @@ class Interval {
     }
   }
 
-  List<Interval> symetricDiffetence(Interval other) {
-    final list = <Interval>[null, null];
+  List<Interval?> symetricDiffetence(Interval other) {
+    final list = <Interval?>[null, null];
     try {
       list[0] = difference(other);
     } catch (e) {
@@ -96,11 +106,13 @@ class Interval {
   // Operators
   bool operator <(Interval other) => start.isBefore(other.start);
 
-  bool operator <=(Interval other) => start.isBefore(other.start) || start.isAtSameMomentAs(other.start);
+  bool operator <=(Interval other) =>
+      start.isBefore(other.start) || start.isAtSameMomentAs(other.start);
 
   bool operator >(Interval other) => end.isAfter(other.end);
 
-  bool operator >=(Interval other) => end.isAfter(other.end) || end.isAtSameMomentAs(other.end);
+  bool operator >=(Interval other) =>
+      end.isAfter(other.end) || end.isAtSameMomentAs(other.end);
 
   @override
   String toString() => '<${start} | ${end} | ${duration} >';
@@ -127,12 +139,14 @@ extension Date on DateTime {
   /// Transforms a date that follows a pattern from a [String] representation to a [DateTime] object
   static DateTime parse(
     String dateString, {
-    String pattern,
+    String? pattern,
     String locale = 'en_US',
     bool isUTC = false,
   }) {
     initializeDateFormatting();
-    return pattern == null ? DateTime.parse(dateString) : DateFormat(pattern, locale).parse(dateString, isUTC);
+    return pattern == null
+        ? DateTime.parse(dateString)
+        : DateFormat(pattern, locale).parse(dateString, isUTC);
   }
 
   /// Create a [Date] object from a Unix timestamp
@@ -171,11 +185,17 @@ extension Date on DateTime {
 
   /// Add a certain amount of days to this date
   DateTime addDays(int amount, [bool ignoreDaylightSavings = false]) =>
-      ignoreDaylightSavings ? DateTime(year, month, day + amount, hour, minute, second, millisecond, microsecond) : add(Duration(days: amount));
+      ignoreDaylightSavings
+          ? DateTime(year, month, day + amount, hour, minute, second,
+              millisecond, microsecond)
+          : add(Duration(days: amount));
 
   /// Add a certain amount of hours to this date
   DateTime addHours(int amount, [bool ignoreDaylightSavings = false]) =>
-      ignoreDaylightSavings ? DateTime(year, month, day, hour + amount, minute, second, millisecond, microsecond) : add(Duration(hours: amount));
+      ignoreDaylightSavings
+          ? DateTime(year, month, day, hour + amount, minute, second,
+              millisecond, microsecond)
+          : add(Duration(hours: amount));
 
   // TODO: this
   // Date addISOYears(int amount) {
@@ -190,7 +210,10 @@ extension Date on DateTime {
 
   /// Add a certain amount of minutes to this date
   DateTime addMinutes(int amount, [bool ignoreDaylightSavings = false]) =>
-      ignoreDaylightSavings ? DateTime(year, month, day, hour, minute + amount, second, millisecond, microsecond) : add(Duration(minutes: amount));
+      ignoreDaylightSavings
+          ? DateTime(year, month, day, hour, minute + amount, second,
+              millisecond, microsecond)
+          : add(Duration(minutes: amount));
 
   /// Add a certain amount of months to this date
   DateTime addMonths(int amount) => clone.setMonth(month + amount);
@@ -200,7 +223,10 @@ extension Date on DateTime {
 
   /// Add a certain amount of seconds to this date
   DateTime addSeconds(int amount, [bool ignoreDaylightSavings = false]) =>
-      ignoreDaylightSavings ? DateTime(year, month, day, hour, minute, second + amount, millisecond, microsecond) : add(Duration(seconds: amount));
+      ignoreDaylightSavings
+          ? DateTime(year, month, day, hour, minute, second + amount,
+              millisecond, microsecond)
+          : add(Duration(seconds: amount));
 
   /// Add a certain amount of weeks to this date
   DateTime addWeeks(int amount) => addDays(amount * 7);
@@ -230,7 +256,7 @@ extension Date on DateTime {
   }
 
   /// Get index of the closest day to current one, returns null if empty [Iterable] is passed as argument
-  int closestIndexTo(Iterable<DateTime> datesArray) {
+  int? closestIndexTo(Iterable<DateTime> datesArray) {
     final differences = datesArray.map((date) {
       return date.difference(this).abs();
     });
@@ -249,11 +275,16 @@ extension Date on DateTime {
   }
 
   /// Get closest day to current one, returns null if empty [Iterable] is passed as argument
-  DateTime closestTo(Iterable<DateTime> datesArray) {
+  DateTime? closestTo(Iterable<DateTime> datesArray) {
     if (datesArray.isEmpty) {
       return null;
     }
-    return datesArray.elementAt(closestIndexTo(datesArray));
+    final index = closestIndexTo(datesArray);
+    if (index == null) {
+      return null;
+    }
+
+    return datesArray.elementAt(index);
   }
 
   /// Compares this Date object to [other],
@@ -264,10 +295,12 @@ extension Date on DateTime {
   int compare(DateTime other) => compareTo(other);
 
   /// Returns true if left [isBefore] than right
-  static DateTime min(DateTime left, DateTime right) => (left < right) ? left : right;
+  static DateTime min(DateTime left, DateTime right) =>
+      (left < right) ? left : right;
 
   /// Returns true if left [isAfter] than right
-  static DateTime max(DateTime left, DateTime right) => (left < right) ? right : left;
+  static DateTime max(DateTime left, DateTime right) =>
+      (left < right) ? right : left;
 
   /// Compare the two dates and return 1 if the first date [isAfter] the second,
   /// -1 if the first date [isBefore] the second or 0 first date [isEqual] the second.
@@ -283,7 +316,8 @@ extension Date on DateTime {
 
   /// Compare the two dates and return -1 if the first date [isAfter] the second,
   /// 1 if the first date [isBefore] the second or 0 first date [isEqual] the second.
-  static int compareDesc(DateTime dateLeft, DateTime dateRight) => (-1) * compareAsc(dateLeft, dateRight);
+  static int compareDesc(DateTime dateLeft, DateTime dateRight) =>
+      (-1) * compareAsc(dateLeft, dateRight);
 
   // int differenceInCalendarDays(dateLeft, dateRight)
   // int differenceInCalendarISOWeeks(dateLeft, dateRight)
@@ -326,11 +360,12 @@ extension Date on DateTime {
   /// - If [allowFromNow] is passed, format will use the From prefix, ie. a date
   ///   5 minutes from now in 'en' locale will display as '5 minutes from now'
   /// If locales was not loaded previously en would be used use timeago.setLocaleMessages to set them
-  String timeago({String locale, DateTime clock, bool allowFromNow}) => timeago_lib.format(
+  String timeago({String? locale, DateTime? clock, bool? allowFromNow}) =>
+      timeago_lib.format(
         this,
         locale: locale,
         clock: clock,
-        allowFromNow: allowFromNow,
+        allowFromNow: allowFromNow ?? false,
       );
 
   /// Return the array of dates within the specified range.
@@ -546,10 +581,12 @@ extension Date on DateTime {
   bool get isFuture => isAfter(DateTime.now());
 
   /// Is the given date the last day of a month?
-  bool get isLastDayOfMonth => isSameDay(nextMonth.startOfMonth.subHours(12).startOfDay);
+  bool get isLastDayOfMonth =>
+      isSameDay(nextMonth.startOfMonth.subHours(12).startOfDay);
 
   /// Is the given date in the leap year?
-  bool get isLeapYear => (year % 400 == 0) || (year % 4 == 0 && year % 100 != 0);
+  bool get isLeapYear =>
+      (year % 400 == 0) || (year % 4 == 0 && year % 100 != 0);
 
   /// Return true if this date [isBefore] [Date.now]
   bool get isPast => isBefore(DateTime.now());
@@ -572,7 +609,8 @@ extension Date on DateTime {
   // bool isSameQuarter(dateLeft, dateRight)
 
   /// Check if this date is in the same second than other
-  bool isSameSecond(DateTime other) => secondsSinceEpoch == other.secondsSinceEpoch;
+  bool isSameSecond(DateTime other) =>
+      secondsSinceEpoch == other.secondsSinceEpoch;
 
   // bool isSameWeek(dateLeft, dateRight, [options])
 
@@ -619,7 +657,8 @@ extension Date on DateTime {
   bool get isWeekend => day == DateTime.saturday || day == DateTime.sunday;
 
   /// Checks if a [DateTime] is within a Rage (two dates that makes an [Interval])
-  bool isWithinRange(DateTime startDate, DateTime endDate) => Interval(startDate, endDate).includes(this);
+  bool isWithinRange(DateTime startDate, DateTime endDate) =>
+      Interval(startDate, endDate).includes(this);
 
   /// Checks if a [DateTime] is within an [Interval]
   bool isWithinInterval(Interval interval) => interval.includes(this);
@@ -650,13 +689,13 @@ extension Date on DateTime {
   /// set [microsecond] if you want to change it as well
   DateTime setYear(
     int year, [
-    int month,
-    int day,
-    int hour,
-    int minute,
-    int second,
-    int millisecond,
-    int microsecond,
+    int? month,
+    int? day,
+    int? hour,
+    int? minute,
+    int? second,
+    int? millisecond,
+    int? microsecond,
   ]) =>
       DateTime(
         year,
@@ -679,12 +718,12 @@ extension Date on DateTime {
   /// set [microsecond] if you want to change it as well
   DateTime setMonth(
     int month, [
-    int day,
-    int hour,
-    int minute,
-    int second,
-    int millisecond,
-    int microsecond,
+    int? day,
+    int? hour,
+    int? minute,
+    int? second,
+    int? millisecond,
+    int? microsecond,
   ]) =>
       DateTime(
         year,
@@ -706,11 +745,11 @@ extension Date on DateTime {
   /// set [microsecond] if you want to change it as well
   DateTime setDay(
     int day, [
-    int hour,
-    int minute,
-    int second,
-    int millisecond,
-    int microsecond,
+    int? hour,
+    int? minute,
+    int? second,
+    int? millisecond,
+    int? microsecond,
   ]) =>
       DateTime(
         year,
@@ -731,10 +770,10 @@ extension Date on DateTime {
   /// set [microsecond] if you want to change it as well
   DateTime setHour(
     int hour, [
-    int minute,
-    int second,
-    int millisecond,
-    int microsecond,
+    int? minute,
+    int? second,
+    int? millisecond,
+    int? microsecond,
   ]) =>
       DateTime(
         year,
@@ -754,9 +793,9 @@ extension Date on DateTime {
   /// set [microsecond] if you want to change it as well
   DateTime setMinute(
     int minute, [
-    int second,
-    int millisecond,
-    int microsecond,
+    int? second,
+    int? millisecond,
+    int? microsecond,
   ]) =>
       DateTime(
         year,
@@ -775,8 +814,8 @@ extension Date on DateTime {
   /// set [microsecond] if you want to change it as well
   DateTime setSecond(
     int second, [
-    int millisecond,
-    int microsecond,
+    int? millisecond,
+    int? microsecond,
   ]) =>
       DateTime(
         year,
@@ -794,7 +833,7 @@ extension Date on DateTime {
   /// set [microsecond] if you want to change it as well
   DateTime setMillisecond(
     int millisecond, [
-    int microsecond,
+    int? microsecond,
   ]) =>
       DateTime(
         year,
@@ -852,13 +891,15 @@ extension Date on DateTime {
   DateTime get startOfWeek => subtract(Duration(days: weekday)).startOfDay;
 
   /// Get a [DateTime] representing start of year of this [DateTime] in local time.
-  DateTime get startOfYear => clone.setMonth(DateTime.january, 1, 0, 0, 0, 0, 0);
+  DateTime get startOfYear =>
+      clone.setMonth(DateTime.january, 1, 0, 0, 0, 0, 0);
 
   /// Get the start of a local week-numbering year
   DateTime get startOfWeekYear => startOfYear.startOfWeek;
 
   /// Get the start of a local week-numbering year
-  DateTime get startOfISOWeekYear => DateTime(year, DateTime.january, 4).startOfISOWeek;
+  DateTime get startOfISOWeekYear =>
+      DateTime(year, DateTime.january, 4).startOfISOWeek;
 
   /// Get the number of weeks in an ISO week-numbering year
   int get getISOWeeksInYear {
@@ -906,7 +947,8 @@ extension Date on DateTime {
 
   bool operator <(DateTime other) => isBefore(other);
 
-  bool operator <=(DateTime other) => isBefore(other) || isAtSameMomentAs(other);
+  bool operator <=(DateTime other) =>
+      isBefore(other) || isAtSameMomentAs(other);
 
   bool operator >(DateTime other) => isAfter(other);
 

@@ -30,7 +30,7 @@ main(List<String> args) {
       n.nextMonth,
       n.nextYear,
     ],
-  );
+  )!;
   print('Closest to now ($now): $closest (${closest.timeago()})');
 
   print(Date.today is DateTime);

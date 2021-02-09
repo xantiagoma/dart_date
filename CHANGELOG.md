@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0-nullsafety.0
+
+- Add null-safety
+
 ## 1.0.9
 
 - Rename `UTC` to `utc` & `Local` to `local` to follow dart analysis
