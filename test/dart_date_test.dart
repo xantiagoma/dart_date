@@ -45,11 +45,11 @@ void main() {
 
   group('Week', () {
     test('getWeek', () {
-      expect(DateTime(2005, DateTime.january, 3).getWeek, 2);
+      expect(DateTime(2005, DateTime.january, 2).getWeek, 1);
     });
 
     test('getWeekPreviousYear', () {
-      expect(DateTime(2005, DateTime.january, 2).getWeek, 1);
+      expect(DateTime(2005, DateTime.january, 1).getWeek, 0);
     });
 
     test('getWeekBefore100AD', () {
@@ -107,6 +107,26 @@ void main() {
 
     test('getISOWeeksInYearBefore100AD', () {
       expect(DateTime(4, DateTime.january, 4).getISOWeeksInYear, 53);
+    });
+
+    test('startOfWeek', () {
+      expect(DateTime(2022, DateTime.january, 9).startOfWeek,
+          DateTime(2022, DateTime.january, 9).startOfDay);
+    });
+
+    test('endOfWeek', () {
+      expect(DateTime(2022, DateTime.january, 9).endOfWeek,
+          DateTime(2022, DateTime.january, 15).endOfDay);
+    });
+
+    test('startOfISOWeek', () {
+      expect(DateTime(2022, DateTime.january, 9).startOfISOWeek,
+          DateTime(2022, DateTime.january, 3).startOfDay);
+    });
+
+    test('endOfISOWeek', () {
+      expect(DateTime(2022, DateTime.january, 9).endOfISOWeek,
+          DateTime(2022, DateTime.january, 9).endOfDay);
     });
   });
 }

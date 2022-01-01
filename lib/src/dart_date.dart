@@ -397,7 +397,7 @@ extension Date on DateTime {
   DateTime get endOfHour => clone.setMinute(59, 59, 999, 999);
 
   /// Return the end of ISO week for this date. The result will be in the local timezone.
-  DateTime get endOfISOWeek => endOfWeek.nextDay;
+  DateTime get endOfISOWeek => startOfISOWeek.addDays(6).endOfDay;
 
   // DateTime endOfISOYear()
 
@@ -511,7 +511,7 @@ extension Date on DateTime {
     // Round the number of days to the nearest integer
     // because the number of milliseconds in a week is not constant
     // (e.g. it's different in the week of the daylight saving time clock shift)
-    return ((diff.inMilliseconds / MILLISECONDS_IN_WEEK) + 1).round();
+    return (diff.inMilliseconds / MILLISECONDS_IN_WEEK).round();
   }
 
   /// Get the ISO week index
@@ -870,7 +870,7 @@ extension Date on DateTime {
   DateTime get startOfHour => clone.setMinute(0, 0, 0, 0);
 
   /// Get a [DateTime] representing start of week (ISO week) of this [DateTime] in local time.
-  DateTime get startOfISOWeek => startOfWeek.nextDay;
+  DateTime get startOfISOWeek => subDays(weekday - 1).startOfDay;
 
   // DateTime startOfISOYear()
 
@@ -888,7 +888,8 @@ extension Date on DateTime {
   static DateTime get startOfToday => today.startOfDay;
 
   /// Get a [DateTime] representing start of week of this [DateTime] in local time.
-  DateTime get startOfWeek => subtract(Duration(days: weekday)).startOfDay;
+  DateTime get startOfWeek =>
+      weekday == DateTime.sunday ? startOfDay : subDays(weekday).startOfDay;
 
   /// Get a [DateTime] representing start of year of this [DateTime] in local time.
   DateTime get startOfYear =>
