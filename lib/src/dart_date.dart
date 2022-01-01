@@ -505,23 +505,31 @@ extension Date on DateTime {
   int get getWeekday => weekday;
 
   /// Get the week index
-  int get getWeek {
-    final diff = startOfWeek.difference(startOfWeekYear);
-
-    // Round the number of days to the nearest integer
-    // because the number of milliseconds in a week is not constant
-    // (e.g. it's different in the week of the daylight saving time clock shift)
-    return (diff.inMilliseconds / MILLISECONDS_IN_WEEK).round();
-  }
+  int get getWeek => addDays(1).getISOWeek;
 
   /// Get the ISO week index
   int get getISOWeek {
-    final diff = startOfISOWeek.difference(startOfISOWeekYear);
+    final woy = ((_ordinalDate - weekday + 10) ~/ 7);
 
-    // Round the number of days to the nearest integer
-    // because the number of milliseconds in a week is not constant
-    // (e.g. it's different in the week of the daylight saving time clock shift)
-    return ((diff.inMilliseconds / MILLISECONDS_IN_WEEK) + 1).round();
+    // If the week number equals zero, it means that the given date belongs to the preceding (week-based) year.
+    if (woy == 0) {
+      // The 28th of December is always in the last week of the year
+      return DateTime(year - 1, 12, 28).getISOWeek;
+    }
+
+    // If the week number equals 53, one must check that the date is not actually in week 1 of the following year
+    if (woy == 53 &&
+        DateTime(year, 1, 1).weekday != DateTime.thursday &&
+        DateTime(year, 12, 31).weekday != DateTime.thursday) {
+      return 1;
+    }
+
+    return woy;
+  }
+
+  int get _ordinalDate {
+    const offsets = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+    return offsets[month - 1] + day + (isLeapYear && month > 2 ? 1 : 0);
   }
 
   /// Get the local week-numbering year
@@ -585,8 +593,7 @@ extension Date on DateTime {
       isSameDay(nextMonth.startOfMonth.subHours(12).startOfDay);
 
   /// Is the given date in the leap year?
-  bool get isLeapYear =>
-      (year % 400 == 0) || (year % 4 == 0 && year % 100 != 0);
+  bool get isLeapYear => year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
 
   /// Return true if this date [isBefore] [Date.now]
   bool get isPast => isBefore(DateTime.now());
@@ -899,18 +906,11 @@ extension Date on DateTime {
   DateTime get startOfWeekYear => startOfYear.startOfWeek;
 
   /// Get the start of a local week-numbering year
-  DateTime get startOfISOWeekYear =>
-      DateTime(year, DateTime.january, 4).startOfISOWeek;
+  DateTime get startOfISOWeekYear => startOfYear.startOfISOWeek;
 
   /// Get the number of weeks in an ISO week-numbering year
   int get getISOWeeksInYear {
-    final thisYear = startOfISOWeekYear;
-    final nextYear = thisYear.addWeeks(60).startOfISOWeekYear;
-    final diff = nextYear.difference(thisYear);
-    // Round the number of weeks to the nearest integer
-    // because the number of milliseconds in a week is not constant
-    // (e.g. it's different in the week of the daylight saving time clock shift)
-    return (diff.inMilliseconds / MILLISECONDS_IN_WEEK).round();
+    return DateTime(year, 12, 28).getISOWeek;
   }
 
   /// Subtracts a [Duration] from this [DateTime]

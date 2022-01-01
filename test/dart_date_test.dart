@@ -49,11 +49,11 @@ void main() {
     });
 
     test('getWeekPreviousYear', () {
-      expect(DateTime(2005, DateTime.january, 1).getWeek, 0);
+      expect(DateTime(2005, DateTime.january, 1).getWeek, 53);
     });
 
     test('getWeekBefore100AD', () {
-      expect(DateTime(7, DateTime.december, 30).getWeek, 52);
+      expect(DateTime(7, DateTime.december, 30).getISOWeek, 52);
     });
 
     test('getISOWeek', () {
@@ -61,11 +61,12 @@ void main() {
     });
 
     test('getISOWeekPreviousYear', () {
-      expect(DateTime(2005, DateTime.january, 2).getISOWeek, 0);
+      expect(DateTime(2005, DateTime.january, 2).getISOWeek, 53);
     });
 
-    test('getISOWeekBefore100AD', () {
-      expect(DateTime(7, DateTime.december, 30).getISOWeek, 52);
+    test('ISOWeek - Week compare', () {
+      expect(DateTime(1922, DateTime.january, 1).getWeek, 1);
+      expect(DateTime(1922, DateTime.january, 1).getISOWeek, 52);
     });
 
     test('getWeekYear', () {
@@ -84,7 +85,7 @@ void main() {
 
     test('startOfISOWeekYear', () {
       expect(DateTime(2005, DateTime.july, 2).startOfISOWeekYear,
-          DateTime(2005, DateTime.january, 3));
+          DateTime(2004, DateTime.december, 27));
     });
 
     test('startOfISOWeekYearOnFirstJanuary', () {
