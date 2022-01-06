@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- Merge [PR](https://github.com/xantiagoma/dart_date/pull/16) to fix week calculation
+
 ## 1.1.0-nullsafety.0
 
 - Add null-safety
