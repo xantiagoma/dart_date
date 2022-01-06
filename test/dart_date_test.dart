@@ -45,15 +45,15 @@ void main() {
 
   group('Week', () {
     test('getWeek', () {
-      expect(DateTime(2005, DateTime.january, 3).getWeek, 2);
-    });
-
-    test('getWeekPreviousYear', () {
       expect(DateTime(2005, DateTime.january, 2).getWeek, 1);
     });
 
+    test('getWeekPreviousYear', () {
+      expect(DateTime(2005, DateTime.january, 1).getWeek, 53);
+    });
+
     test('getWeekBefore100AD', () {
-      expect(DateTime(7, DateTime.december, 30).getWeek, 52);
+      expect(DateTime(7, DateTime.december, 30).getISOWeek, 52);
     });
 
     test('getISOWeek', () {
@@ -61,11 +61,12 @@ void main() {
     });
 
     test('getISOWeekPreviousYear', () {
-      expect(DateTime(2005, DateTime.january, 2).getISOWeek, 0);
+      expect(DateTime(2005, DateTime.january, 2).getISOWeek, 53);
     });
 
-    test('getISOWeekBefore100AD', () {
-      expect(DateTime(7, DateTime.december, 30).getISOWeek, 52);
+    test('ISOWeek - Week compare', () {
+      expect(DateTime(1922, DateTime.january, 1).getWeek, 1);
+      expect(DateTime(1922, DateTime.january, 1).getISOWeek, 52);
     });
 
     test('getWeekYear', () {
@@ -84,7 +85,7 @@ void main() {
 
     test('startOfISOWeekYear', () {
       expect(DateTime(2005, DateTime.july, 2).startOfISOWeekYear,
-          DateTime(2005, DateTime.january, 3));
+          DateTime(2004, DateTime.december, 27));
     });
 
     test('startOfISOWeekYearOnFirstJanuary', () {
@@ -107,6 +108,26 @@ void main() {
 
     test('getISOWeeksInYearBefore100AD', () {
       expect(DateTime(4, DateTime.january, 4).getISOWeeksInYear, 53);
+    });
+
+    test('startOfWeek', () {
+      expect(DateTime(2022, DateTime.january, 9).startOfWeek,
+          DateTime(2022, DateTime.january, 9).startOfDay);
+    });
+
+    test('endOfWeek', () {
+      expect(DateTime(2022, DateTime.january, 9).endOfWeek,
+          DateTime(2022, DateTime.january, 15).endOfDay);
+    });
+
+    test('startOfISOWeek', () {
+      expect(DateTime(2022, DateTime.january, 9).startOfISOWeek,
+          DateTime(2022, DateTime.january, 3).startOfDay);
+    });
+
+    test('endOfISOWeek', () {
+      expect(DateTime(2022, DateTime.january, 9).endOfISOWeek,
+          DateTime(2022, DateTime.january, 9).endOfDay);
     });
   });
 }
