@@ -53,7 +53,7 @@ class Interval {
 
   Interval intersection(Interval other) {
     if (cross(other)) {
-      if (start.isAfter(other.start)) {
+      if (start.isAfter(other.start) || start.isAtSameMomentAs(other.start)) {
         return Interval(start, other.end);
       } else {
         return Interval(other.start, end);

@@ -152,8 +152,28 @@ void main() {
               .equals(Interval(DateTime(2023), DateTime(2024))),
           true);
     });
+    test('intersection start is equal', () {
+      final firstInterval = Interval(DateTime(2022), DateTime(2025));
+      final secondInterval = Interval(DateTime(2022), DateTime(2024));
 
-    test("intersection throws if they don't crossing", () {
+      expect(
+          firstInterval
+              .intersection(secondInterval)
+              .equals(Interval(DateTime(2022), DateTime(2024))),
+          true);
+    });
+    test('intersection end is equal', () {
+      final firstInterval = Interval(DateTime(2023), DateTime(2025));
+      final secondInterval = Interval(DateTime(2022), DateTime(2025));
+
+      expect(
+          firstInterval
+              .intersection(secondInterval)
+              .equals(Interval(DateTime(2023), DateTime(2025))),
+          true);
+    });
+
+    test("intersection throws if the intervals don't cross", () {
       final firstInterval = Interval(DateTime(2023), DateTime(2025));
       final secondInterval = Interval(DateTime(2026), DateTime(2027));
 
