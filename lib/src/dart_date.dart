@@ -769,6 +769,23 @@ extension Date on DateTime {
         microsecond ?? this.microsecond,
       );
 
+  /// Change [weekday] of this date
+  ///
+  /// set [weekStartsOn] if you want to use any other day as the start of the week
+  DateTime setWeekDay(int weekday, [int weekStartsOn = DateTime.sunday]) {
+    const daysPerWeek = DateTime.daysPerWeek;
+    final currentDay = this.weekday;
+    final reminder = weekday % daysPerWeek;
+    final dayIndex = (reminder + daysPerWeek) % daysPerWeek;
+    final delta = daysPerWeek - weekStartsOn;
+    final diff = weekday < 0 || weekday > 6
+        ? weekday - ((currentDay + delta) % daysPerWeek)
+        : ((dayIndex + delta) % daysPerWeek) -
+            ((currentDay + delta) % daysPerWeek);
+
+    return addDays(diff);
+  }
+
   /// Change [hour] of this date
   ///
   /// set [minute] if you want to change it as well, to skip an change other optional field set it as [null]

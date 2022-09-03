@@ -197,6 +197,7 @@ isSameYear(DateTime other) → bool
 isWithinInterval(Interval interval) → bool
 isWithinRange(DateTime startDate, DateTime endDate) → bool
 setDay(int day, [int hour, int minute, int second, int millisecond, int microsecond]) → DateTime
+setWeekDay(int weekday, [int weekStartsOn]) → DateTime
 setHour(int hour, [int minute, int second, int millisecond, int microsecond]) → DateTime
 setMicrosecond(int microsecond) → DateTime
 setMillisecond(int millisecond, [int microsecond]) → DateTime
