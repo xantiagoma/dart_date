@@ -1,6 +1,6 @@
 # dart_date
 
-Dart Extensions for `DartTime`
+Dart Extensions for `DateTime`
 
 dart_date provides the most comprehensive, yet simple and consistent toolset for manipulating Dart dates.
 
