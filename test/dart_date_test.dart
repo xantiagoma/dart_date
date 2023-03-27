@@ -129,6 +129,14 @@ void main() {
       expect(DateTime(2022, DateTime.january, 9).endOfISOWeek,
           DateTime(2022, DateTime.january, 9).endOfDay);
     });
+
+    test('setWeekDay', () {
+      final base = DateTime(2022, DateTime.september, 3);
+      for (var i = 1; i <= DateTime.daysPerWeek; i++) {
+        final date = base.setWeekDay(i);
+        expect(date.weekday, i);
+      }
+    });
   });
 
   group('Interval', () {
