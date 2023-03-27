@@ -130,4 +130,57 @@ void main() {
           DateTime(2022, DateTime.january, 9).endOfDay);
     });
   });
+
+  group('Interval', () {
+    test('intersection first before second', () {
+      final firstInterval = Interval(DateTime(2022), DateTime(2024));
+      final secondInterval = Interval(DateTime(2023), DateTime(2025));
+
+      expect(
+          firstInterval
+              .intersection(secondInterval)
+              .equals(Interval(DateTime(2023), DateTime(2024))),
+          true);
+    });
+    test('intersection second before first', () {
+      final firstInterval = Interval(DateTime(2023), DateTime(2025));
+      final secondInterval = Interval(DateTime(2022), DateTime(2024));
+
+      expect(
+          firstInterval
+              .intersection(secondInterval)
+              .equals(Interval(DateTime(2023), DateTime(2024))),
+          true);
+    });
+    test('intersection start is equal', () {
+      final firstInterval = Interval(DateTime(2022), DateTime(2025));
+      final secondInterval = Interval(DateTime(2022), DateTime(2024));
+
+      expect(
+          firstInterval
+              .intersection(secondInterval)
+              .equals(Interval(DateTime(2022), DateTime(2024))),
+          true);
+    });
+    test('intersection end is equal', () {
+      final firstInterval = Interval(DateTime(2023), DateTime(2025));
+      final secondInterval = Interval(DateTime(2022), DateTime(2025));
+
+      expect(
+          firstInterval
+              .intersection(secondInterval)
+              .equals(Interval(DateTime(2023), DateTime(2025))),
+          true);
+    });
+
+    test("intersection throws if the intervals don't cross", () {
+      final firstInterval = Interval(DateTime(2023), DateTime(2025));
+      final secondInterval = Interval(DateTime(2026), DateTime(2027));
+
+      expect(
+        () => firstInterval.intersection(secondInterval),
+        throwsA(isA<RangeError>()),
+      );
+    });
+  });
 }

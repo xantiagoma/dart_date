@@ -53,13 +53,10 @@ class Interval {
 
   Interval intersection(Interval other) {
     if (cross(other)) {
-      if (end.isAfter(other.start) || end.isAtSameMomentAs(other.start)) {
-        return Interval(other.start, end);
-      } else if (other.end.isAfter(start) ||
-          other.end.isAtSameMomentAs(start)) {
-        return Interval(other.start, end);
+      if (start.isAfter(other.start) || start.isAtSameMomentAs(other.start)) {
+        return Interval(start, other.end);
       } else {
-        throw RangeError('Error this: $this; other: $other');
+        return Interval(other.start, end);
       }
     } else {
       throw RangeError('Intervals don\'t cross');
