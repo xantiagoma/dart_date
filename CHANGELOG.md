@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.1
+- Merge [Add setWeekDay function #24](https://github.com/xantiagoma/dart_date/pull/24)
+- Merge [Fix Interval intersection #22](https://github.com/xantiagoma/dart_date/pull/22)
+- Merge [Update README.md #21](https://github.com/xantiagoma/dart_date/pull/21) 
+
 ## 1.1.1
 
 - Merge [PR](https://github.com/xantiagoma/dart_date/pull/16) to fix week calculation
