@@ -52,15 +52,18 @@ class Interval {
   }
 
   Interval intersection(Interval other) {
-    if (cross(other)) {
-      if (start.isAfter(other.start) || start.isAtSameMomentAs(other.start)) {
-        return Interval(start, other.end);
-      } else {
-        return Interval(other.start, end);
+    if (!cross(other)) {
+      if (other.contains(this)) {
+        return this;
       }
-    } else {
+
       throw RangeError('Intervals don\'t cross');
     }
+
+    final intersectionStart = Date.max(start, other.start);
+    final intersectionEnd = Date.min(end, other.end);
+
+    return Interval(intersectionStart, intersectionEnd);
   }
 
   Interval? difference(Interval other) {

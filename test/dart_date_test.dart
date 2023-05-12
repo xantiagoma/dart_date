@@ -190,5 +190,27 @@ void main() {
         throwsA(isA<RangeError>()),
       );
     });
+
+    test('intersection first is inside second', () {
+      final firstInterval = Interval(DateTime(2023), DateTime(2024));
+      final secondInterval = Interval(DateTime(2022), DateTime(2025));
+
+      expect(
+          firstInterval
+              .intersection(secondInterval)
+              .equals(Interval(DateTime(2023), DateTime(2024))),
+          true);
+    });
+
+    test('intersection second is inside first', () {
+      final firstInterval = Interval(DateTime(2022), DateTime(2025));
+      final secondInterval = Interval(DateTime(2023), DateTime(2024));
+
+      expect(
+          firstInterval
+              .intersection(secondInterval)
+              .equals(Interval(DateTime(2023), DateTime(2024))),
+          true);
+    });
   });
 }
