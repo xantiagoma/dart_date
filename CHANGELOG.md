@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.2.2
+- Update dependencies
+
 ## 1.2.1
 - Merge [Add setWeekDay function #24](https://github.com/xantiagoma/dart_date/pull/24)
 - Merge [Fix Interval intersection #22](https://github.com/xantiagoma/dart_date/pull/22)
