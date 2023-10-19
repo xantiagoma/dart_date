@@ -46,6 +46,8 @@ void main() {
       final start = DateTime(2023, 10, 10); // October 10th, 2023
       final end = DateTime(2023, 10, 18); // October 18th, 2023
 
+      expect(start.eachDay(start), orderedEquals([start]));
+
       // Should produce an Iterable that has the 10th to 18th.
       final toTest = start.eachDay(end);
       final expected = [

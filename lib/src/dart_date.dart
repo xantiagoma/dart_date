@@ -374,13 +374,9 @@ extension Date on DateTime {
     }
 
     final daysDiff = differenceInDays(date);
-    final step = daysDiff.isNegative ? 1 : -1;
-    final absDays = daysDiff.abs();
 
-    var current = this;
-    for (var i = 0; i < absDays; i++) {
-      yield current;
-      current = current.addDays(step);
+    for (var i = 0; i != daysDiff; i += daysDiff.sign) {
+      yield this.addDays(-i);
     }
   }
 
