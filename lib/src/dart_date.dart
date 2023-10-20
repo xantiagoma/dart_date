@@ -366,7 +366,10 @@ extension Date on DateTime {
       );
 
   /// Return an Iterable of dates which is inclusive to [this] but exclusive to [date]
-  Iterable<DateTime> eachDay(DateTime date) sync* {
+  Iterable<DateTime> eachDay(
+    DateTime date, {
+    bool ignoreDaylightSavings = false,
+  }) sync* {
     if (isSameDay(date)) {
       yield date.startOfDay;
 
@@ -376,7 +379,7 @@ extension Date on DateTime {
     final daysDiff = differenceInDays(date);
 
     for (var i = 0; i != daysDiff; i += daysDiff.sign) {
-      yield this.addDays(-i);
+      yield this.addDays(-i, ignoreDaylightSavings);
     }
   }
 
