@@ -657,7 +657,8 @@ extension Date on DateTime {
   bool get isUTC => isUtc;
 
   /// Return true if this [DateTime] is a saturday or a sunday
-  bool get isWeekend => day == DateTime.saturday || day == DateTime.sunday;
+  bool get isWeekend =>
+      weekday == DateTime.saturday || weekday == DateTime.sunday;
 
   /// Checks if a [DateTime] is within a Rage (two dates that makes an [Interval])
   bool isWithinRange(DateTime startDate, DateTime endDate) =>

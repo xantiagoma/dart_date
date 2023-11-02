@@ -174,6 +174,20 @@ void main() {
         expect(date.weekday, i);
       }
     });
+
+    test('endOfMonth', () {
+      expect(DateTime(2022, DateTime.january, 9).endOfMonth,
+          DateTime(2022, DateTime.january, 31, 23, 59, 59, 999, 999));
+    });
+
+    test('isWeekend', () {
+      // Saturday and Sunday
+      expect(DateTime(2022, DateTime.january, 9).isWeekend, true);
+      expect(DateTime(2022, DateTime.january, 8).isWeekend, true);
+      // Other days
+      expect(DateTime(2022, DateTime.january, 7).isWeekend, false);
+      expect(DateTime(2022, DateTime.january, 10).isWeekend, false);
+    });
   });
 
   group('Interval', () {

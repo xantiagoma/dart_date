@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.2
+- fix `isWeekend`
+
 ## 1.3.1
 - Merge [fix: intersection on interval containing the other interval #28](https://github.com/xantiagoma/dart_date/pull/28)
 
