@@ -41,6 +41,43 @@ void main() {
       expect(Date.parse('September 12 2012', pattern: 'MMMM dd y').isLeapYear,
           true);
     });
+
+    test('eachDay', () {
+      final start = DateTime(2023, 10, 10); // October 10th, 2023
+      final end = DateTime(2023, 10, 18); // October 18th, 2023
+
+      expect(start.eachDay(start), orderedEquals([start]));
+
+      // Should produce an Iterable that has the 10th to 18th.
+      final toTest = start.eachDay(end);
+      final expected = [
+        DateTime(2023, 10, 10),
+        DateTime(2023, 10, 11),
+        DateTime(2023, 10, 12),
+        DateTime(2023, 10, 13),
+        DateTime(2023, 10, 14),
+        DateTime(2023, 10, 15),
+        DateTime(2023, 10, 16),
+        DateTime(2023, 10, 17),
+      ];
+
+      expect(toTest, orderedEquals(expected));
+
+      // Should produce an Iterable that has the 18th to 11th (reverse).
+      final toTestReverse = end.eachDay(start);
+      final expectedReverse = [
+        DateTime(2023, 10, 18),
+        DateTime(2023, 10, 17),
+        DateTime(2023, 10, 16),
+        DateTime(2023, 10, 15),
+        DateTime(2023, 10, 14),
+        DateTime(2023, 10, 13),
+        DateTime(2023, 10, 12),
+        DateTime(2023, 10, 11),
+      ];
+
+      expect(toTestReverse, orderedEquals(expectedReverse));
+    });
   });
 
   group('Week', () {

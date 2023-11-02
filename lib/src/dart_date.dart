@@ -365,25 +365,21 @@ extension Date on DateTime {
         allowFromNow: allowFromNow ?? false,
       );
 
-  /// Return the array of dates within the specified range.
-  Iterable<DateTime> eachDay(DateTime date) sync* {
+  /// Return an Iterable of dates which is inclusive to [this] but exclusive to [date]
+  Iterable<DateTime> eachDay(
+    DateTime date, {
+    bool ignoreDaylightSavings = false,
+  }) sync* {
     if (isSameDay(date)) {
       yield date.startOfDay;
-    } else {
-      final difference = diff(date);
-      final days = difference.abs().inDays;
-      var current = date.startOfDay;
-      if (difference.isNegative) {
-        for (var i = 0; i < days; i++) {
-          yield current;
-          current = current.nextDay;
-        }
-      } else {
-        for (var i = 0; i < days; i++) {
-          yield current;
-          current = current.nextDay;
-        }
-      }
+
+      return;
+    }
+
+    final daysDiff = differenceInDays(date);
+
+    for (var i = 0; i != daysDiff; i += daysDiff.sign) {
+      yield this.addDays(-i, ignoreDaylightSavings);
     }
   }
 
