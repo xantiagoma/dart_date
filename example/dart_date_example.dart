@@ -33,8 +33,6 @@ main(List<String> args) {
   )!;
   print('Closest to now ($now): $closest (${closest.timeago()})');
 
-  print(Date.today is DateTime);
-
   print("Human String: " +
       DateTime.parse('2014-11-20T16:51:30.000Z').toHumanString());
 
