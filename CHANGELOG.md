@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.3
+- Support `intl` v0.19.0 and Dart 3.0, thanks to @ThexXTURBOXx
+
 ## 1.3.2
 - fix `isWeekend`
 
@@ -15,7 +18,7 @@
 ## 1.2.1
 - Merge [Add setWeekDay function #24](https://github.com/xantiagoma/dart_date/pull/24)
 - Merge [Fix Interval intersection #22](https://github.com/xantiagoma/dart_date/pull/22)
-- Merge [Update README.md #21](https://github.com/xantiagoma/dart_date/pull/21) 
+- Merge [Update README.md #21](https://github.com/xantiagoma/dart_date/pull/21)
 
 ## 1.1.1
 
