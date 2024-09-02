@@ -276,7 +276,7 @@ difference(Interval other) → Interval
 equals(Interval other) → bool
 includes(DateTime date) → bool
 intersection(Interval other) → Interval
-symetricDiffetence(Interval other) → List<Interval>
+symmetricDifference(Interval other) → List<Interval>
 toString() → String
 union(Interval other) → Interval
 

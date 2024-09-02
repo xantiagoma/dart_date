@@ -88,7 +88,7 @@ class Interval {
     }
   }
 
-  List<Interval?> symetricDiffetence(Interval other) {
+  List<Interval?> symmetricDifference(Interval other) {
     final list = <Interval?>[null, null];
     try {
       list[0] = difference(other);
