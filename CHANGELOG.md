@@ -1,21 +1,34 @@
 # Changelog
 
+## 1.4.0
+
+- **!!! BREAKING CHANGE** `Interval` can accept negative values
+- Some methods that used to throw an error now return null instead
+- Fix type with `symetricDifference` to `symmetricDifference`, marking the other one as deprecated @praiaBarryTolnas #39
+- **!!! BREAKING CHANGE** Change extension name from `Date` to `DateTimeExtension` @tjarvstrand #38 - static methods are now exported from `DateTimeExtension._` instead of `Date._`
+
 ## 1.3.3
+
 - Support `intl` v0.19.0 and Dart 3.0, thanks to @ThexXTURBOXx
 
 ## 1.3.2
+
 - fix `isWeekend`
 
 ## 1.3.1
+
 - Merge [fix: intersection on interval containing the other interval #28](https://github.com/xantiagoma/dart_date/pull/28)
 
 ## 1.3.0
+
 - Merge [[BREAKING CHANGE] Fix eachDay function #30](https://github.com/xantiagoma/dart_date/pull/30)
 
 ## 1.2.2
+
 - Update dependencies
 
 ## 1.2.1
+
 - Merge [Add setWeekDay function #24](https://github.com/xantiagoma/dart_date/pull/24)
 - Merge [Fix Interval intersection #22](https://github.com/xantiagoma/dart_date/pull/22)
 - Merge [Update README.md #21](https://github.com/xantiagoma/dart_date/pull/21)

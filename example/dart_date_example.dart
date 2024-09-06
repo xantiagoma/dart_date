@@ -4,7 +4,8 @@ main(List<String> args) {
   const pattern = '\'Heute ist\' dd-MMMM-yyyy';
   final n = DateTime.now();
   final de_String = DateTime.now().format(pattern, 'de_DE');
-  final de_Date = Date.parse(de_String, pattern: pattern, locale: 'de_DE');
+  final de_Date =
+      DateTimeExtension.parse(de_String, pattern: pattern, locale: 'de_DE');
   print(
     'DE (String): $de_String',
   );
@@ -33,16 +34,18 @@ main(List<String> args) {
   )!;
   print('Closest to now ($now): $closest (${closest.timeago()})');
 
-  print(Date.today is DateTime);
+  print(DateTimeExtension.today is DateTime);
 
   print("Human String: " +
       DateTime.parse('2014-11-20T16:51:30.000Z').toHumanString());
 
-  print("Yesterday: " + (Date.today - Duration(days: 1)).toString());
-  print("Tomorrow: " + (Date.today + Duration(days: 1)).toString());
+  print(
+      "Yesterday: " + (DateTimeExtension.today - Duration(days: 1)).toString());
+  print(
+      "Tomorrow: " + (DateTimeExtension.today + Duration(days: 1)).toString());
 
   print(Duration(days: 1) + Duration(hours: 12, minutes: 5));
   print(Duration(days: 1) - Duration(hours: 12, minutes: 5));
   print(Duration(hours: 1) * 2.5);
-  print(Duration(hours: 1) / 70);
+  print(Duration(hours: 1) ~/ 70);
 }
