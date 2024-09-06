@@ -4,19 +4,20 @@ import 'package:test/test.dart';
 void main() {
   group('Getters', () {
     test('timestamp', () {
-      expect(Date.unix(0).timestamp, 0);
-      expect(Date.parse('1996-03-29T11:11:11.011Z').timestamp, 828097871011);
+      expect(DateTimeExtension.unix(0).timestamp, 0);
+      expect(DateTimeExtension.parse('1996-03-29T11:11:11.011Z').timestamp,
+          828097871011);
     });
 
     test('isFirstDayOfMonth', () {
       expect(DateTime(2011, 2, 1, 11).isFirstDayOfMonth, true);
       expect(
-          Date.parse('November 01 2018, 9:14:29 PM',
+          DateTimeExtension.parse('November 01 2018, 9:14:29 PM',
                   pattern: 'MMMM dd y, h:mm:ss a')
               .isFirstDayOfMonth,
           true);
       expect(
-          Date.parse('November 30 2011, 0:14:29 PM',
+          DateTimeExtension.parse('November 30 2011, 0:14:29 PM',
                   pattern: 'MMMM dd y, h:mm:ss a')
               .isFirstDayOfMonth,
           false);
@@ -25,12 +26,12 @@ void main() {
     test('isLastDayOfMonth', () {
       expect(DateTime(2011, 2, 1, 11).isLastDayOfMonth, false);
       expect(
-          Date.parse('November 01 2018, 9:14:29 PM',
+          DateTimeExtension.parse('November 01 2018, 9:14:29 PM',
                   pattern: 'MMMM dd y, h:mm:ss a')
               .isLastDayOfMonth,
           false);
       expect(
-          Date.parse('November 30 2011, 0:14:29 PM',
+          DateTimeExtension.parse('November 30 2011, 0:14:29 PM',
                   pattern: 'MMMM dd y, h:mm:ss a')
               .isLastDayOfMonth,
           true);
@@ -38,7 +39,9 @@ void main() {
 
     test('isLeapYear', () {
       expect(DateTime(2011, 2, 1, 11).isLeapYear, false);
-      expect(Date.parse('September 12 2012', pattern: 'MMMM dd y').isLeapYear,
+      expect(
+          DateTimeExtension.parse('September 12 2012', pattern: 'MMMM dd y')
+              .isLeapYear,
           true);
     });
 
@@ -187,81 +190,6 @@ void main() {
       // Other days
       expect(DateTime(2022, DateTime.january, 7).isWeekend, false);
       expect(DateTime(2022, DateTime.january, 10).isWeekend, false);
-    });
-  });
-
-  group('Interval', () {
-    test('intersection first before second', () {
-      final firstInterval = Interval(DateTime(2022), DateTime(2024));
-      final secondInterval = Interval(DateTime(2023), DateTime(2025));
-
-      expect(
-          firstInterval
-              .intersection(secondInterval)
-              .equals(Interval(DateTime(2023), DateTime(2024))),
-          true);
-    });
-    test('intersection second before first', () {
-      final firstInterval = Interval(DateTime(2023), DateTime(2025));
-      final secondInterval = Interval(DateTime(2022), DateTime(2024));
-
-      expect(
-          firstInterval
-              .intersection(secondInterval)
-              .equals(Interval(DateTime(2023), DateTime(2024))),
-          true);
-    });
-    test('intersection start is equal', () {
-      final firstInterval = Interval(DateTime(2022), DateTime(2025));
-      final secondInterval = Interval(DateTime(2022), DateTime(2024));
-
-      expect(
-          firstInterval
-              .intersection(secondInterval)
-              .equals(Interval(DateTime(2022), DateTime(2024))),
-          true);
-    });
-    test('intersection end is equal', () {
-      final firstInterval = Interval(DateTime(2023), DateTime(2025));
-      final secondInterval = Interval(DateTime(2022), DateTime(2025));
-
-      expect(
-          firstInterval
-              .intersection(secondInterval)
-              .equals(Interval(DateTime(2023), DateTime(2025))),
-          true);
-    });
-
-    test("intersection throws if the intervals don't cross", () {
-      final firstInterval = Interval(DateTime(2023), DateTime(2025));
-      final secondInterval = Interval(DateTime(2026), DateTime(2027));
-
-      expect(
-        () => firstInterval.intersection(secondInterval),
-        throwsA(isA<RangeError>()),
-      );
-    });
-
-    test('intersection first is inside second', () {
-      final firstInterval = Interval(DateTime(2023), DateTime(2024));
-      final secondInterval = Interval(DateTime(2022), DateTime(2025));
-
-      expect(
-          firstInterval
-              .intersection(secondInterval)
-              .equals(Interval(DateTime(2023), DateTime(2024))),
-          true);
-    });
-
-    test('intersection second is inside first', () {
-      final firstInterval = Interval(DateTime(2022), DateTime(2025));
-      final secondInterval = Interval(DateTime(2023), DateTime(2024));
-
-      expect(
-          firstInterval
-              .intersection(secondInterval)
-              .equals(Interval(DateTime(2023), DateTime(2024))),
-          true);
     });
   });
 }

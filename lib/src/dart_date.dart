@@ -2,125 +2,10 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago_lib;
 
-class Interval {
-  late final DateTime _start;
-  late final Duration _duration;
+import 'interval.dart';
+export 'interval.dart';
 
-  Interval(DateTime start, DateTime end) {
-    if (start.isAfter(end)) {
-      throw RangeError('Invalid Range');
-    }
-    _start = start;
-    _duration = end.difference(start);
-  }
-
-  Duration get duration => _duration;
-
-  DateTime get start => _start;
-
-  DateTime get end => _start.add(_duration);
-
-  Interval setStart(DateTime val) => Interval(val, end);
-  Interval setEnd(DateTime val) => Interval(start, val);
-  Interval setDuration(Duration val) => Interval(start, start.add(duration));
-
-  bool includes(DateTime date) =>
-      (date.isAfter(start) || date.isAtSameMomentAs(start)) &&
-      (date.isBefore(end) || date.isAtSameMomentAs(end));
-
-  bool contains(Interval interval) =>
-      includes(interval.start) && includes(interval.end);
-
-  bool cross(Interval other) => includes(other.start) || includes(other.end);
-
-  bool equals(Interval other) =>
-      start.isAtSameMomentAs(other.start) && end.isAtSameMomentAs(other.end);
-
-  Interval union(Interval other) {
-    if (cross(other)) {
-      if (end.isAfter(other.start) || end.isAtSameMomentAs(other.start)) {
-        return Interval(start, other.end);
-      } else if (other.end.isAfter(start) ||
-          other.end.isAtSameMomentAs(start)) {
-        return Interval(other.start, end);
-      } else {
-        throw RangeError('Error this: $this; other: $other');
-      }
-    } else {
-      throw RangeError('Intervals don\'t cross');
-    }
-  }
-
-  Interval intersection(Interval other) {
-    if (!cross(other)) {
-      if (other.contains(this)) {
-        return this;
-      }
-
-      throw RangeError('Intervals don\'t cross');
-    }
-
-    final intersectionStart = Date.max(start, other.start);
-    final intersectionEnd = Date.min(end, other.end);
-
-    return Interval(intersectionStart, intersectionEnd);
-  }
-
-  Interval? difference(Interval other) {
-    if (other == this) {
-      return null;
-    } else if (this <= other) {
-      // | this | | other |
-      if (end.isBefore(other.start)) {
-        return this;
-      } else {
-        return Interval(start, other.start);
-      }
-    } else if (this >= other) {
-      // | other | | this |
-      if (other.end.isBefore(start)) {
-        return this;
-      } else {
-        return Interval(other.end, end);
-      }
-    } else {
-      throw RangeError('Error this: $this; other: $other');
-    }
-  }
-
-  List<Interval?> symetricDiffetence(Interval other) {
-    final list = <Interval?>[null, null];
-    try {
-      list[0] = difference(other);
-    } catch (e) {
-      list[0] = null;
-    }
-    try {
-      list[1] = other.difference(this);
-    } catch (e) {
-      list[1] = null;
-    }
-    return list;
-  }
-
-  // Operators
-  bool operator <(Interval other) => start.isBefore(other.start);
-
-  bool operator <=(Interval other) =>
-      start.isBefore(other.start) || start.isAtSameMomentAs(other.start);
-
-  bool operator >(Interval other) => end.isAfter(other.end);
-
-  bool operator >=(Interval other) =>
-      end.isAfter(other.end) || end.isAtSameMomentAs(other.end);
-
-  @override
-  String toString() => '<${start} | ${end} | ${duration} >';
-}
-
-const int MILLISECONDS_IN_WEEK = 604800000;
-
-extension Date on DateTime {
+extension DateTimeExtension on DateTime {
   /// Number of seconds since epoch time / A.K.A Unix timestamp
   ///
   /// The Unix epoch (or Unix time or POSIX time or Unix timestamp) is the number of
@@ -241,14 +126,6 @@ extension Date on DateTime {
     DateTime comparedRangeStartDate,
     DateTime comparedRangeEndDate,
   ) {
-    if (initialRangeStartDate.isAfter(initialRangeEndDate)) {
-      throw RangeError('Not valid initial range');
-    }
-
-    if (comparedRangeStartDate.isAfter(comparedRangeEndDate)) {
-      throw RangeError('Not valid compareRange range');
-    }
-
     final initial = Interval(initialRangeStartDate, initialRangeEndDate);
     final compared = Interval(comparedRangeStartDate, comparedRangeEndDate);
 
@@ -1110,23 +987,5 @@ extension Date on DateTime {
 
   DateTime operator +(Duration other) {
     return add(other);
-  }
-}
-
-extension DurationExtension on Duration {
-  Duration operator -(Duration other) {
-    return Duration(microseconds: inMicroseconds - other.inMicroseconds);
-  }
-
-  Duration operator +(Duration other) {
-    return Duration(microseconds: inMicroseconds + other.inMicroseconds);
-  }
-
-  Duration operator *(num other) {
-    return Duration(microseconds: (inMicroseconds * other).round());
-  }
-
-  Duration operator /(num other) {
-    return Duration(microseconds: (inMicroseconds / other).round());
   }
 }
