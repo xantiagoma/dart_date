@@ -37,10 +37,10 @@ extension DateTimeExtension on DateTime {
   /// Create a [Date] object from a Unix timestamp
   static DateTime unix(int seconds) => fromSecondsSinceEpoch(seconds);
 
-  /// Tomorrow at same hour / minute / second than now
+  /// Tomorrow at same hour / minute / second as now
   static DateTime get tomorrow => DateTime.now().nextDay;
 
-  /// Yesterday at same hour / minute / second than now
+  /// Yesterday at same hour / minute / second as now
   static DateTime get yesterday => DateTime.now().previousDay;
 
   /// Current date (Same as [Date.now])
@@ -171,11 +171,11 @@ extension DateTimeExtension on DateTime {
   /// (when this [isAfter] [other]).
   int compare(DateTime other) => compareTo(other);
 
-  /// Returns true if left [isBefore] than right
+  /// Returns true if left [isBefore] right
   static DateTime min(DateTime left, DateTime right) =>
       (left < right) ? left : right;
 
-  /// Returns true if left [isAfter] than right
+  /// Returns true if left [isAfter] right
   static DateTime max(DateTime left, DateTime right) =>
       (left < right) ? right : left;
 
@@ -471,63 +471,63 @@ extension DateTimeExtension on DateTime {
   /// Return true if this date [isBefore] [Date.now]
   bool get isPast => isBefore(DateTime.now());
 
-  /// Check if this date is in the same day than other
+  /// Check if this date is in the same day as other
   bool isSameDay(DateTime other) => startOfDay == other.startOfDay;
 
-  /// Check if this date is in the same hour than other
+  /// Check if this date is in the same hour as other
   bool isSameHour(DateTime other) => startOfHour == other.startOfHour;
 
   // bool isSameISOWeek(dateLeft, dateRight)
   // bool isSameISOYear(dateLeft, dateRight)
 
-  /// Check if this date is in the same minute than other
+  /// Check if this date is in the same minute as other
   bool isSameMinute(DateTime other) => startOfMinute == other.startOfMinute;
 
-  /// Check if this date is in the same month than other
+  /// Check if this date is in the same month as other
   bool isSameMonth(DateTime other) => startOfMonth == other.startOfMonth;
 
   // bool isSameQuarter(dateLeft, dateRight)
 
-  /// Check if this date is in the same second than other
+  /// Check if this date is in the same second as other
   bool isSameSecond(DateTime other) =>
       secondsSinceEpoch == other.secondsSinceEpoch;
 
   // bool isSameWeek(dateLeft, dateRight, [options])
 
-  /// Check if this date is in the same year than other
+  /// Check if this date is in the same year as other
   bool isSameYear(DateTime other) => year == other.year;
 
-  /// Check if this date is in the same hour than [DateTime.now]
+  /// Check if this date is in the same hour as [DateTime.now]
   bool get isThisHour => startOfHour == today.startOfHour;
 
   // bool isThisISOWeek()
   // bool isThisISOYear()
 
-  /// Check if this date is in the same minute than [DateTime.now]
+  /// Check if this date is in the same minute as [DateTime.now]
   bool get isThisMinute => startOfMinute == today.startOfMinute;
 
-  /// Check if this date is in the same month than [DateTime.now]
+  /// Check if this date is in the same month as [DateTime.now]
   bool get isThisMonth => isSameMonth(today);
 
   // bool isThisQuarter()
 
-  /// Check if this date is in the same second than [DateTime.now]
+  /// Check if this date is in the same second as [DateTime.now]
   bool get isThisSecond => isSameSecond(today);
 
   // bool isThisWeek(, [options])
 
-  /// Check if this date is in the same year than [DateTime.now]
+  /// Check if this date is in the same year as [DateTime.now]
   bool get isThisYear => isSameYear(today);
 
   // bool isValid()
 
-  /// Check if this date is in the same day than [DateTime.today]
+  /// Check if this date is in the same day as [DateTime.today]
   bool get isToday => isSameDay(today);
 
-  /// Check if this date is in the same day than [DateTime.tomorrow]
+  /// Check if this date is in the same day as [DateTime.tomorrow]
   bool get isTomorrow => isSameDay(tomorrow);
 
-  /// Check if this date is in the same day than [DateTime.yesterday]
+  /// Check if this date is in the same day as [DateTime.yesterday]
   bool get isYesterday => isSameDay(yesterday);
 
   /// Return true if this [DateTime] is set as UTC.
