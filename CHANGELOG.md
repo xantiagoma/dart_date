@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.5.2
+- Add `startOfQuarter` and `endOfQuarter` getters
+
 ## 1.5.1
 
 - Add `ignoreDaylightSavings` parameter to `subDays`, `subHours`, `subMinutes`, and `subSeconds` methods

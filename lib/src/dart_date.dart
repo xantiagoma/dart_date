@@ -280,7 +280,26 @@ extension DateTimeExtension on DateTime {
   /// Return the end of the month for this date. The result will be in the local timezone.
   DateTime get endOfMonth => DateTime(year, month + 1).subMicroseconds(1);
 
-  // Date endOfQuarter()
+  /// Get a [DateTime] representing start of quarter of this [DateTime] in local time.
+  DateTime get startOfQuarter {
+    // Calculate quarter (1-4)
+    final quarter = (month - 1) ~/ 3 + 1;
+    // First month of the quarter
+    final firstMonthOfQuarter = (quarter - 1) * 3 + 1;
+    return clone.setMonth(firstMonthOfQuarter, 1, 0, 0, 0, 0, 0);
+  }
+
+  /// Return the end of quarter for this date. The result will be in the local timezone.
+  DateTime get endOfQuarter {
+    // Calculate quarter (1-4)
+    final quarter = (month - 1) ~/ 3 + 1;
+    // Last month of the quarter
+    final lastMonthOfQuarter = quarter * 3;
+    // First day of the next month after the quarter
+    final firstDayAfterQuarter = DateTime(year, lastMonthOfQuarter + 1, 1);
+    // Subtract 1 microsecond to get end of the last day of the quarter
+    return firstDayAfterQuarter.subMicroseconds(1);
+  }
 
   /// Return the end of the second for this date. The result will be in the local timezone.
   DateTime get endOfSecond => clone.setMillisecond(999, 999);
@@ -759,8 +778,6 @@ extension DateTimeExtension on DateTime {
         microsecond,
       );
 
-  // DateTime setQuarter(quarter)
-
   /// Get a [DateTime] representing start of Day of this [DateTime] in local time.
   DateTime get startOfDay => clone.setHour(0, 0, 0, 0, 0);
 
@@ -778,7 +795,6 @@ extension DateTimeExtension on DateTime {
   /// Get a [DateTime] representing start of month of this [DateTime] in local time.
   DateTime get startOfMonth => clone.setDay(1, 0, 0, 0, 0, 0);
 
-  // DateTime startOfQuarter()
   /// Get a [DateTime] representing start of second of this [DateTime] in local time.
   DateTime get startOfSecond => clone.setMillisecond(0, 0);
 
