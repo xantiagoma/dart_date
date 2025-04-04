@@ -151,5 +151,8 @@ class Interval {
       other is Interval && start == other.start && end == other.end;
 
   @override
+  int get hashCode => Object.hash(start, end);
+
+  @override
   String toString() => '<${start} | ${end} | ${duration} >';
 }

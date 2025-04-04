@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.5.3
+- Add `hashCode` override in `Interval` class to properly support identity in hash-based collections
+
 ## 1.5.2
 - Add `startOfQuarter` and `endOfQuarter` getters
 
