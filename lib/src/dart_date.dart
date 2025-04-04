@@ -868,10 +868,10 @@ extension DateTimeExtension on DateTime {
   DateTime get previousYear => clone.setYear(year - 1);
 
   /// The week after this [DateTime]
-  DateTime get nextWeek => addDays(7);
+  DateTime get nextWeek => addDays(7, true);
 
   /// The week previous this [DateTime]
-  DateTime get previousWeek => subDays(7);
+  DateTime get previousWeek => subDays(7, true);
 
   /// Number of seconds since epoch time
   ///
