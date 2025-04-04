@@ -361,4 +361,71 @@ void main() {
       expect(resultWithIgnore.isAtSameMomentAs(addSecondsResult), true);
     });
   });
+
+  group('Quarters', () {
+    test('startOfQuarter', () {
+      // Quarter 1 (Jan-Mar)
+      expect(DateTime(2023, 1, 15).startOfQuarter, DateTime(2023, 1, 1));
+      expect(DateTime(2023, 2, 15).startOfQuarter, DateTime(2023, 1, 1));
+      expect(DateTime(2023, 3, 15).startOfQuarter, DateTime(2023, 1, 1));
+
+      // Quarter 2 (Apr-Jun)
+      expect(DateTime(2023, 4, 15).startOfQuarter, DateTime(2023, 4, 1));
+      expect(DateTime(2023, 5, 15).startOfQuarter, DateTime(2023, 4, 1));
+      expect(DateTime(2023, 6, 15).startOfQuarter, DateTime(2023, 4, 1));
+
+      // Quarter 3 (Jul-Sep)
+      expect(DateTime(2023, 7, 15).startOfQuarter, DateTime(2023, 7, 1));
+      expect(DateTime(2023, 8, 15).startOfQuarter, DateTime(2023, 7, 1));
+      expect(DateTime(2023, 9, 15).startOfQuarter, DateTime(2023, 7, 1));
+
+      // Quarter 4 (Oct-Dec)
+      expect(DateTime(2023, 10, 15).startOfQuarter, DateTime(2023, 10, 1));
+      expect(DateTime(2023, 11, 15).startOfQuarter, DateTime(2023, 10, 1));
+      expect(DateTime(2023, 12, 15).startOfQuarter, DateTime(2023, 10, 1));
+
+      // Check time components are zero
+      final date = DateTime(2023, 5, 15, 10, 30, 45);
+      final startQuarter = date.startOfQuarter;
+      expect(startQuarter.hour, 0);
+      expect(startQuarter.minute, 0);
+      expect(startQuarter.second, 0);
+      expect(startQuarter.millisecond, 0);
+      expect(startQuarter.microsecond, 0);
+    });
+
+    test('endOfQuarter', () {
+      // Quarter 1 (Jan-Mar)
+      expect(DateTime(2023, 1, 15).endOfQuarter,
+          DateTime(2023, 3, 31, 23, 59, 59, 999, 999));
+      expect(DateTime(2023, 2, 15).endOfQuarter,
+          DateTime(2023, 3, 31, 23, 59, 59, 999, 999));
+      expect(DateTime(2023, 3, 15).endOfQuarter,
+          DateTime(2023, 3, 31, 23, 59, 59, 999, 999));
+
+      // Quarter 2 (Apr-Jun)
+      expect(DateTime(2023, 4, 15).endOfQuarter,
+          DateTime(2023, 6, 30, 23, 59, 59, 999, 999));
+      expect(DateTime(2023, 5, 15).endOfQuarter,
+          DateTime(2023, 6, 30, 23, 59, 59, 999, 999));
+      expect(DateTime(2023, 6, 15).endOfQuarter,
+          DateTime(2023, 6, 30, 23, 59, 59, 999, 999));
+
+      // Quarter 3 (Jul-Sep)
+      expect(DateTime(2023, 7, 15).endOfQuarter,
+          DateTime(2023, 9, 30, 23, 59, 59, 999, 999));
+      expect(DateTime(2023, 8, 15).endOfQuarter,
+          DateTime(2023, 9, 30, 23, 59, 59, 999, 999));
+      expect(DateTime(2023, 9, 15).endOfQuarter,
+          DateTime(2023, 9, 30, 23, 59, 59, 999, 999));
+
+      // Quarter 4 (Oct-Dec)
+      expect(DateTime(2023, 10, 15).endOfQuarter,
+          DateTime(2023, 12, 31, 23, 59, 59, 999, 999));
+      expect(DateTime(2023, 11, 15).endOfQuarter,
+          DateTime(2023, 12, 31, 23, 59, 59, 999, 999));
+      expect(DateTime(2023, 12, 15).endOfQuarter,
+          DateTime(2023, 12, 31, 23, 59, 59, 999, 999));
+    });
+  });
 }
