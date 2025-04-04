@@ -808,10 +808,12 @@ extension DateTimeExtension on DateTime {
   DateTime sub(Duration duration) => add(Duration.zero - duration);
 
   /// Subtracts an amount of hours from this [DateTime]
-  DateTime subHours(int amount) => addHours(-amount);
+  DateTime subHours(int amount, [bool ignoreDaylightSavings = false]) =>
+      addHours(-amount, ignoreDaylightSavings);
 
   /// Subtracts an amount of days from this [DateTime]
-  DateTime subDays(int amount) => addDays(-amount);
+  DateTime subDays(int amount, [bool ignoreDaylightSavings = false]) =>
+      addDays(-amount, ignoreDaylightSavings);
 
   /// Subtracts an amount of milliseconds from this [DateTime]
   DateTime subMilliseconds(amount) => addMilliseconds(-amount);
@@ -821,14 +823,16 @@ extension DateTimeExtension on DateTime {
 
   // DateTime subISOYears(amount)
   /// Subtracts an amount of minutes from this [DateTime]
-  DateTime subMinutes(amount) => addMinutes(-amount);
+  DateTime subMinutes(amount, [bool ignoreDaylightSavings = false]) =>
+      addMinutes(-amount, ignoreDaylightSavings);
 
   /// Subtracts an amount of months from this [DateTime]
   DateTime subMonths(amount) => addMonths(-amount);
 
   // DateTime subQuarters(amount)
   /// Subtracts an amount of seconds from this [DateTime]
-  DateTime subSeconds(amount) => addSeconds(-amount);
+  DateTime subSeconds(amount, [bool ignoreDaylightSavings = false]) =>
+      addSeconds(-amount, ignoreDaylightSavings);
 
   // DateTime subWeeks(amount)
   /// Subtracts an amount of years from this [DateTime]

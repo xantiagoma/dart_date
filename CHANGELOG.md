@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.1
+
+- Add `ignoreDaylightSavings` parameter to `subDays`, `subHours`, `subMinutes`, and `subSeconds` methods
+- Update `previousWeek` to use `ignoreDaylightSavings=true` like `nextWeek`
+- https://github.com/xantiagoma/dart_date/pull/43 changes on `nextWeek` and `previousWeek` check if you're logic depends on daylight savings.
+
 ## 1.5.0
 - https://github.com/xantiagoma/dart_date/pull/45
 

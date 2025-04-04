@@ -192,4 +192,173 @@ void main() {
       expect(DateTime(2022, DateTime.january, 10).isWeekend, false);
     });
   });
+
+  group('Date additions and subtractions', () {
+    test('addDays with ignoreDaylightSavings', () {
+      // Create a date not during DST
+      final date = DateTime(2023, 1, 1, 1, 30);
+
+      // Test with ignoreDaylightSavings = true
+      final resultWithIgnore = date.addDays(1, true);
+      expect(resultWithIgnore.hour, 1); // Hour should remain the same
+      expect(resultWithIgnore.minute, 30); // Minute should remain the same
+
+      // Test with ignoreDaylightSavings = false (default behavior)
+      final resultWithoutIgnore = date.addDays(1);
+
+      // Both should give same day result
+      expect(resultWithoutIgnore.day, 2);
+      expect(resultWithIgnore.day, 2);
+
+      // Direct constructor with day+1 should match ignoreDaylightSavings=true
+      final directConstructed = DateTime(
+          date.year,
+          date.month,
+          date.day + 1,
+          date.hour,
+          date.minute,
+          date.second,
+          date.millisecond,
+          date.microsecond);
+      expect(resultWithIgnore.hour, directConstructed.hour);
+      expect(resultWithIgnore.minute, directConstructed.minute);
+    });
+
+    test('subDays with ignoreDaylightSavings', () {
+      // Create a date not during DST
+      final date = DateTime(2023, 1, 2, 1, 30);
+
+      // Test with ignoreDaylightSavings = true
+      final resultWithIgnore = date.subDays(1, true);
+      expect(resultWithIgnore.hour, 1); // Hour should remain the same
+      expect(resultWithIgnore.minute, 30); // Minute should remain the same
+
+      // Test with ignoreDaylightSavings = false (default behavior)
+      final resultWithoutIgnore = date.subDays(1);
+
+      // Both should give same day result
+      expect(resultWithoutIgnore.day, 1);
+      expect(resultWithIgnore.day, 1);
+
+      // Direct constructor with day-1 should match ignoreDaylightSavings=true
+      final directConstructed = DateTime(
+          date.year,
+          date.month,
+          date.day - 1,
+          date.hour,
+          date.minute,
+          date.second,
+          date.millisecond,
+          date.microsecond);
+      expect(resultWithIgnore.hour, directConstructed.hour);
+      expect(resultWithIgnore.minute, directConstructed.minute);
+    });
+
+    test('nextWeek and previousWeek with ignoreDaylightSavings', () {
+      // Create a date not during DST
+      final date = DateTime(2023, 1, 10, 1, 30);
+
+      // Both nextWeek and previousWeek should use ignoreDaylightSavings=true
+      final nextWeekResult = date.nextWeek;
+      final previousWeekResult = date.previousWeek;
+
+      // Verify they use the same behavior as addDays/subDays with ignoreDaylightSavings=true
+      final manualNextWeek = date.addDays(7, true);
+      final manualPreviousWeek = date.subDays(7, true);
+
+      expect(nextWeekResult.hour, manualNextWeek.hour);
+      expect(nextWeekResult.minute, manualNextWeek.minute);
+      expect(previousWeekResult.hour, manualPreviousWeek.hour);
+      expect(previousWeekResult.minute, manualPreviousWeek.minute);
+
+      // Also verify hours and minutes remain the same
+      expect(nextWeekResult.hour, 1);
+      expect(nextWeekResult.minute, 30);
+      expect(previousWeekResult.hour, 1);
+      expect(previousWeekResult.minute, 30);
+    });
+
+    test('subHours with ignoreDaylightSavings', () {
+      // Create a test date
+      final date = DateTime(2023, 1, 1, 2, 30);
+
+      // Test with ignoreDaylightSavings = true
+      final resultWithIgnore = date.subHours(1, true);
+      expect(resultWithIgnore.hour, 1);
+      expect(resultWithIgnore.minute, 30);
+
+      // Direct constructor should match ignoreDaylightSavings=true
+      final directConstructed = DateTime(
+          date.year,
+          date.month,
+          date.day,
+          date.hour - 1,
+          date.minute,
+          date.second,
+          date.millisecond,
+          date.microsecond);
+      expect(resultWithIgnore.hour, directConstructed.hour);
+      expect(resultWithIgnore.minute, directConstructed.minute);
+
+      // Test that it calls addHours with the correct parameters
+      final addHoursResult = date.addHours(-1, true);
+      expect(resultWithIgnore.isAtSameMomentAs(addHoursResult), true);
+    });
+
+    test('subMinutes with ignoreDaylightSavings', () {
+      // Create a test date
+      final date = DateTime(2023, 1, 1, 1, 30);
+
+      // Test with ignoreDaylightSavings = true
+      final resultWithIgnore = date.subMinutes(15, true);
+      expect(resultWithIgnore.hour, 1);
+      expect(resultWithIgnore.minute, 15);
+
+      // Direct constructor should match ignoreDaylightSavings=true
+      final directConstructed = DateTime(
+          date.year,
+          date.month,
+          date.day,
+          date.hour,
+          date.minute - 15,
+          date.second,
+          date.millisecond,
+          date.microsecond);
+      expect(resultWithIgnore.hour, directConstructed.hour);
+      expect(resultWithIgnore.minute, directConstructed.minute);
+
+      // Test that it calls addMinutes with the correct parameters
+      final addMinutesResult = date.addMinutes(-15, true);
+      expect(resultWithIgnore.isAtSameMomentAs(addMinutesResult), true);
+    });
+
+    test('subSeconds with ignoreDaylightSavings', () {
+      // Create a test date
+      final date = DateTime(2023, 1, 1, 1, 30, 30);
+
+      // Test with ignoreDaylightSavings = true
+      final resultWithIgnore = date.subSeconds(15, true);
+      expect(resultWithIgnore.hour, 1);
+      expect(resultWithIgnore.minute, 30);
+      expect(resultWithIgnore.second, 15);
+
+      // Direct constructor should match ignoreDaylightSavings=true
+      final directConstructed = DateTime(
+          date.year,
+          date.month,
+          date.day,
+          date.hour,
+          date.minute,
+          date.second - 15,
+          date.millisecond,
+          date.microsecond);
+      expect(resultWithIgnore.hour, directConstructed.hour);
+      expect(resultWithIgnore.minute, directConstructed.minute);
+      expect(resultWithIgnore.second, directConstructed.second);
+
+      // Test that it calls addSeconds with the correct parameters
+      final addSecondsResult = date.addSeconds(-15, true);
+      expect(resultWithIgnore.isAtSameMomentAs(addSecondsResult), true);
+    });
+  });
 }
