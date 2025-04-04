@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.5.0
+- https://github.com/xantiagoma/dart_date/pull/45
+
 ## 1.4.0
 
 - **!!! BREAKING CHANGE** `Interval` can accept negative values
