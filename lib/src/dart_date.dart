@@ -62,7 +62,7 @@ extension DateTimeExtension on DateTime {
   //   return add(duration);
   // }
 
-  /// Substract a [Duration] to this date
+  /// Subtract a [Duration] to this date
   DateTime subtract(Duration duration) => add(Duration.zero - duration);
 
   /// Get the difference between this data and other date as a [Duration]
@@ -352,10 +352,10 @@ extension DateTimeExtension on DateTime {
   /// The second 0...59.
   int get getSeconds => second;
 
-  /// get the numer of milliseconds since epoch
+  /// get the number of milliseconds since epoch
   int get timestamp => millisecondsSinceEpoch;
 
-  /// get the numer of milliseconds since epoch
+  /// get the number of milliseconds since epoch
   int get getTime => millisecondsSinceEpoch;
 
   /// The year
@@ -807,31 +807,31 @@ extension DateTimeExtension on DateTime {
   /// Subtracts a [Duration] from this [DateTime]
   DateTime sub(Duration duration) => add(Duration.zero - duration);
 
-  /// Subtracts an amout of hours from this [DateTime]
+  /// Subtracts an amount of hours from this [DateTime]
   DateTime subHours(int amount) => addHours(-amount);
 
-  /// Subtracts an amout of days from this [DateTime]
+  /// Subtracts an amount of days from this [DateTime]
   DateTime subDays(int amount) => addDays(-amount);
 
-  /// Subtracts an amout of milliseconds from this [DateTime]
+  /// Subtracts an amount of milliseconds from this [DateTime]
   DateTime subMilliseconds(amount) => addMilliseconds(-amount);
 
-  /// Subtracts an amout of microseconds from this [DateTime]
+  /// Subtracts an amount of microseconds from this [DateTime]
   DateTime subMicroseconds(amount) => addMicroseconds(-amount);
 
   // DateTime subISOYears(amount)
-  /// Subtracts an amout of minutes from this [DateTime]
+  /// Subtracts an amount of minutes from this [DateTime]
   DateTime subMinutes(amount) => addMinutes(-amount);
 
-  /// Subtracts an amout of months from this [DateTime]
+  /// Subtracts an amount of months from this [DateTime]
   DateTime subMonths(amount) => addMonths(-amount);
 
   // DateTime subQuarters(amount)
-  /// Subtracts an amout of seconds from this [DateTime]
+  /// Subtracts an amount of seconds from this [DateTime]
   DateTime subSeconds(amount) => addSeconds(-amount);
 
   // DateTime subWeeks(amount)
-  /// Subtracts an amout of years from this [DateTime]
+  /// Subtracts an amount of years from this [DateTime]
   DateTime subYears(amount) => addYears(-amount);
 
   // Check if two dates are [equals]
