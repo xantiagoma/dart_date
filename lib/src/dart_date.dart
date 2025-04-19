@@ -3,7 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago_lib;
 
 import 'interval.dart';
+
 export 'interval.dart';
+
+final DateTime epoch = DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
 
 extension DateTimeExtension on DateTime {
   /// Number of seconds since epoch time / A.K.A Unix timestamp
@@ -43,7 +46,7 @@ extension DateTimeExtension on DateTime {
   /// Yesterday at same hour / minute / second as now
   static DateTime get yesterday => DateTime.now().previousDay;
 
-  /// Current date (Same as [Date.now])
+  /// Current date (Same as [DateTime.now])
   static DateTime get today => DateTime.now();
 
   /// Get [Date] object as UTC of current object.
